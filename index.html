@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="theme-color" content="#242326">
+	<title>Project Registration Portal | Marikina University College</title>
+	<link rel="icon" type="image/png" href="assets/Mainlogotransp.png">
+	<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+	<script src="supabase-config.js"></script>
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+	<style>
+		:root {
+			--navy: #242326;
+			--navy-deep: #111113;
+			--blue: #6d1d28;
+			--red: #9f1725;
+			--yellow: #c79b62;
+			--cream: #e9e7e4;
+			--muted: #6d6a68;
+			--line: #d0cbc5;
+			--white: #ffffff;
+			--shadow: 0 24px 70px rgba(36, 35, 38, .2);
+		}
+
+		* { box-sizing: border-box; }
+		body {
+			margin: 0;
+			min-height: 100vh;
+			color: var(--navy);
+			background: #dedbd7;
+			font-family: 'DM Sans', sans-serif;
+			-webkit-font-smoothing: antialiased;
+		}
+
+		.portal {
+			min-height: 100vh;
+			display: grid;
+			grid-template-columns: minmax(320px, .9fr) minmax(440px, 1.1fr);
+			overflow: hidden;
+		}
+
+		.brand-panel {
+			position: relative;
+			display: flex;
+			flex-direction: column;
+			justify-content: space-between;
+			padding: 42px clamp(28px, 5vw, 76px);
+			color: var(--white);
+			background:
+				linear-gradient(145deg, rgba(27, 26, 28, .99), rgba(67, 54, 50, .97)),
+				var(--navy);
+			isolation: isolate;
+			overflow: hidden;
+		}
+
+		.brand-panel::before,
+		.brand-panel::after {
+			content: '';
+			position: absolute;
+			z-index: -1;
+			border-radius: 50%;
+			pointer-events: none;
+		}
+		.brand-panel::before {
+			width: 510px;
+			height: 510px;
+			top: -230px;
+			right: -185px;
+			border: 64px solid rgba(199, 155, 98, .15);
+		}
+		.brand-panel::after {
+			width: 420px;
+			height: 420px;
+			bottom: -280px;
+			left: -190px;
+			background: rgba(159, 23, 37, .16);
+		}
+		.seal-watermark {
+			display: block;
+			position: absolute;
+			z-index: -1;
+			top: 36px;
+			right: -220px;
+			width: 620px;
+			height: 620px;
+			opacity: .1;
+			filter: saturate(.8);
+			pointer-events: none;
+		}
+
+		.institution {
+			display: flex;
+			align-items: center;
+			gap: 14px;
+			font-family: 'Space Grotesk', sans-serif;
+			font-size: .83rem;
+			font-weight: 700;
+			letter-spacing: .06em;
+			line-height: 1.25;
+			text-transform: uppercase;
+		}
+		.institution-mark {
+			width: 42px;
+			height: 42px;
+			display: grid;
+			place-items: center;
+			color: var(--navy);
+			background: var(--yellow);
+			border-radius: 50%;
+			font-family: 'Space Grotesk', sans-serif;
+			font-size: 1.05rem;
+			font-weight: 700;
+		}
+
+		.brand-content { max-width: 540px; margin: auto 0; padding: 54px 0 42px; }
+		.seal-wrap {
+			position: relative;
+			width: 168px;
+			height: 168px;
+			display: grid;
+			place-items: center;
+			margin-bottom: 36px;
+			border: 1px solid rgba(199, 155, 98, .62);
+			border-radius: 50%;
+			background: rgba(255, 255, 255, .08);
+			box-shadow: 0 18px 40px rgba(0, 0, 0, .18);
+			overflow: hidden;
+		}
+		.seal-wrap::after {
+			content: '';
+			position: absolute;
+			inset: 8px;
+			border: 1px dashed rgba(199, 155, 98, .72);
+			border-radius: 50%;
+		}
+		.seal {
+			z-index: 1;
+			width: 138px;
+			height: 138px;
+			object-fit: contain;
+			border-radius: 50%;
+		}
+		.seal-svg {
+			display: none;
+			z-index: 1;
+			width: 138px;
+			height: 138px;
+		}
+		.seal-fallback {
+			z-index: 1;
+			display: none;
+			place-items: center;
+			width: 112px;
+			height: 112px;
+			border: 5px solid var(--yellow);
+			border-radius: 50%;
+			color: #e0bd8b;
+			font-family: 'Space Grotesk', sans-serif;
+			font-size: 1.35rem;
+			font-weight: 700;
+			text-align: center;
+		}
+		.eyebrow {
+			margin: 0 0 13px;
+			color: var(--yellow);
+			font-size: .75rem;
+			font-weight: 700;
+			letter-spacing: .17em;
+			text-transform: uppercase;
+		}
+		h1, h2 { font-family: 'Space Grotesk', sans-serif; }
+		h1 {
+			max-width: 520px;
+			margin: 0;
+			font-size: clamp(2.15rem, 4.5vw, 4rem);
+			letter-spacing: -.055em;
+			line-height: .98;
+		}
+		.brand-copy {
+			max-width: 450px;
+			margin: 22px 0 0;
+			color: rgba(255,255,255,.72);
+			font-size: 1rem;
+			line-height: 1.7;
+		}
+		.panel-footer {
+			display: flex;
+			justify-content: space-between;
+			gap: 16px;
+			color: rgba(255,255,255,.53);
+			font-size: .76rem;
+		}
+
+		.form-panel {
+			display: grid;
+			place-items: center;
+			padding: 42px clamp(24px, 6vw, 100px);
+			background: #f2f0ed;
+		}
+		.login-card { width: min(100%, 430px); }
+		.card-kicker {
+			display: inline-flex;
+			align-items: center;
+			gap: 8px;
+			margin-bottom: 18px;
+			color: var(--blue);
+			font-size: .76rem;
+			font-weight: 700;
+			letter-spacing: .12em;
+			text-transform: uppercase;
+		}
+		.card-kicker::before {
+			content: '';
+			width: 24px;
+			height: 3px;
+			background: var(--red);
+			border-radius: 99px;
+		}
+		h2 {
+			margin: 0;
+			font-size: clamp(2rem, 3vw, 2.65rem);
+			letter-spacing: -.05em;
+			line-height: 1;
+		}
+		.form-intro { margin: 13px 0 32px; color: var(--muted); line-height: 1.6; }
+		.field { margin-bottom: 19px; }
+		label {
+			display: block;
+			margin-bottom: 8px;
+			color: var(--navy);
+			font-size: .83rem;
+			font-weight: 700;
+		}
+		.input-wrap { position: relative; }
+		input {
+			width: 100%;
+			height: 52px;
+			padding: 0 15px;
+			border: 1px solid var(--line);
+			border-radius: 9px;
+			outline: none;
+			color: var(--navy);
+			background: var(--white);
+			font: inherit;
+			transition: border .2s ease, box-shadow .2s ease;
+		}
+		input::placeholder { color: #a4afbb; }
+		input:focus { border-color: var(--blue); box-shadow: 0 0 0 4px rgba(13, 79, 145, .12); }
+		.password-input { padding-right: 52px; }
+		.password-toggle {
+			position: absolute;
+			top: 50%;
+			right: 8px;
+			width: 36px;
+			height: 36px;
+			border: 0;
+			border-radius: 7px;
+			color: var(--muted);
+			background: transparent;
+			cursor: pointer;
+			transform: translateY(-50%);
+		}
+		.password-toggle:hover { color: var(--blue); background: #edf3f8; }
+		.form-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: 3px 0 24px; }
+		.remember { display: flex; align-items: center; gap: 8px; color: var(--muted); font-size: .8rem; font-weight: 500; }
+		.remember input { width: 16px; height: 16px; accent-color: var(--blue); }
+		.forgot { color: var(--blue); font-size: .8rem; font-weight: 700; text-decoration: none; }
+		.forgot:hover { color: var(--red); text-decoration: underline; }
+		.submit {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			gap: 10px;
+			width: 100%;
+			height: 54px;
+			border: 0;
+			border-radius: 9px;
+			color: var(--navy);
+			background: var(--yellow);
+			box-shadow: 0 8px 18px rgba(196, 157, 17, .22);
+			cursor: pointer;
+			font: 700 .92rem 'DM Sans', sans-serif;
+			transition: transform .2s ease, box-shadow .2s ease, background .2s ease;
+		}
+		.submit:hover { background: #ffdf43; box-shadow: 0 12px 24px rgba(196, 157, 17, .28); transform: translateY(-2px); }
+		.submit:active { transform: translateY(0); }
+		.submit svg { transition: transform .2s ease; }
+		.submit:hover svg { transform: translateX(4px); }
+		.status { min-height: 22px; margin: 13px 0 0; color: var(--red); font-size: .82rem; text-align: center; }
+		.support { margin-top: 42px; padding-top: 20px; border-top: 1px solid var(--line); color: var(--muted); font-size: .78rem; text-align: center; }
+		.support a { color: var(--blue); font-weight: 700; text-decoration: none; }
+		.form-view[hidden] { display: none; }
+		.account-switch { margin-top: 22px; color: var(--muted); font-size: .82rem; text-align: center; }
+		.account-switch button { padding: 0; border: 0; color: var(--blue); background: transparent; cursor: pointer; font: 700 .82rem 'DM Sans', sans-serif; }
+		.account-switch button:hover { color: var(--red); text-decoration: underline; }
+		.terms { display: flex; align-items: flex-start; gap: 9px; margin: 3px 0 23px; color: var(--muted); font-size: .78rem; line-height: 1.45; }
+		.terms input { flex: 0 0 auto; width: 16px; height: 16px; margin-top: 1px; accent-color: var(--blue); }
+		.terms a { color: var(--blue); font-weight: 700; text-decoration: none; }
+		.dashboard { min-height: 100vh; color: var(--navy); background: #e9e7e4; }
+		.dashboard[hidden] { display: none; }
+		.dashboard-header { display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 20px clamp(22px, 5vw, 70px); color: var(--white); background: var(--navy); }
+		.dashboard-brand { display: flex; align-items: center; gap: 12px; font-family: 'Space Grotesk', sans-serif; font-size: .92rem; font-weight: 700; letter-spacing: .03em; }
+		.dashboard-brand img { width: 42px; height: 42px; object-fit: contain; }
+		.dashboard-user { display: flex; align-items: center; gap: 12px; font-size: .83rem; }
+		.avatar { display: grid; place-items: center; width: 38px; height: 38px; border-radius: 50%; color: var(--navy); background: var(--yellow); font-weight: 800; }
+		.logout { border: 1px solid rgba(255,255,255,.25); border-radius: 7px; padding: 9px 13px; color: var(--white); background: transparent; cursor: pointer; font: 700 .78rem 'DM Sans', sans-serif; }
+		.logout:hover { border-color: var(--yellow); color: var(--yellow); }
+		.dashboard-body { max-width: 1280px; margin: 0 auto; padding: 42px clamp(22px, 5vw, 70px) 70px; }
+		.dashboard-intro { display: flex; align-items: end; justify-content: space-between; gap: 28px; margin-bottom: 28px; }
+		.dashboard-intro h1 { max-width: none; margin: 0; color: var(--navy); font-size: clamp(2rem, 4vw, 3.4rem); }
+		.dashboard-intro p { max-width: 560px; margin: 12px 0 0; color: var(--muted); }
+		.term-select { border: 1px solid var(--line); border-radius: 8px; padding: 11px 14px; color: var(--navy); background: var(--white); font: 600 .82rem 'DM Sans', sans-serif; }
+		.dashboard-grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 18px; }
+		.dashboard-card { border: 1px solid var(--line); border-radius: 12px; padding: 22px; background: rgba(255,255,255,.7); box-shadow: 0 12px 28px rgba(36,35,38,.07); }
+		.summary-card { grid-column: span 3; }
+		.summary-label { color: var(--muted); font-size: .76rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+		.summary-value { margin-top: 12px; font: 700 2rem 'Space Grotesk', sans-serif; }
+		.summary-note { margin-top: 5px; color: #28704a; font-size: .78rem; font-weight: 700; }
+		.results-card { grid-column: span 8; }
+		.results-card { overflow-x: auto; }
+		.announcements-card { grid-column: span 4; }
+		.card-heading { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 18px; }
+		.card-heading h2 { margin: 0; font-size: 1.25rem; letter-spacing: -.03em; }
+		.card-heading a { color: var(--blue); font-size: .78rem; font-weight: 700; text-decoration: none; }
+		.results-table { width: 100%; min-width: 760px; border-collapse: collapse; font-size: .85rem; }
+		.results-table th { padding: 10px 8px; border-bottom: 1px solid var(--line); color: var(--muted); font-size: .7rem; letter-spacing: .08em; text-align: left; text-transform: uppercase; }
+		.results-table td { padding: 14px 8px; border-bottom: 1px solid var(--line); }
+		.results-table tr:last-child td { border-bottom: 0; }
+		.grade { font-weight: 800; color: var(--blue); }
+		.status-badge { display: inline-block; border-radius: 99px; padding: 4px 8px; color: #28704a; background: #e1f1e7; font-size: .7rem; font-weight: 800; }
+		.announcement { padding: 14px 0; border-bottom: 1px solid var(--line); }
+		.announcement:last-child { border-bottom: 0; }
+		.announcement strong { display: block; font-size: .86rem; }
+		.announcement span { display: block; margin-top: 5px; color: var(--muted); font-size: .76rem; line-height: 1.5; }
+		.quick-actions { grid-column: span 12; display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+		.action { display: flex; align-items: center; justify-content: space-between; gap: 12px; border: 1px solid var(--line); border-radius: 10px; padding: 16px; color: var(--navy); background: var(--white); cursor: pointer; font: 700 .84rem 'DM Sans', sans-serif; text-align: left; }
+		.action:hover { border-color: var(--blue); transform: translateY(-2px); }
+		.action span { color: var(--blue); font-size: 1.2rem; }
+		.password-match { display: block; min-height: 18px; margin-top: 6px; font-size: .75rem; font-weight: 600; }
+		.password-match.match { color: #28704a; }
+		.password-match.mismatch { color: var(--red); }
+
+		@media (max-width: 800px) {
+			.portal { grid-template-columns: 1fr; }
+			.brand-panel { min-height: 430px; padding: 28px 24px; }
+			.brand-content { margin: 34px 0 0; padding: 0 0 24px; }
+			.seal-wrap { width: 100px; height: 100px; margin-bottom: 20px; }
+			.seal { width: 80px; height: 80px; }
+			.seal-svg { width: 80px; height: 80px; }
+			.seal-watermark { top: 82px; right: -135px; width: 390px; height: 390px; opacity: .08; }
+			.seal-fallback { width: 74px; height: 74px; font-size: .9rem; }
+			h1 { font-size: clamp(2.1rem, 9vw, 3.4rem); }
+			.panel-footer { display: none; }
+			.form-panel { padding: 48px 24px 58px; }
+			.dashboard-header { align-items: flex-start; padding: 16px 20px; }
+			.dashboard-user > span:not(.avatar) { display: none; }
+			.dashboard-body { padding: 30px 18px 50px; }
+			.dashboard-intro { display: block; }
+			.term-select { margin-top: 18px; width: 100%; }
+			.summary-card, .results-card, .announcements-card { grid-column: span 12; }
+			.quick-actions { grid-template-columns: 1fr; }
+		}
+		@media (prefers-reduced-motion: reduce) {
+			*, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; }
+		}
+	</style>
+</head>
+<body>
+	<main class="portal">
+		<section class="brand-panel" aria-label="Institution information">
+			<img class="seal-watermark" src="assets/Mainlogotransp.png" alt="" aria-hidden="true" onerror="this.remove();">
+			<div class="institution"><span class="institution-mark">MUC</span><span>Marikina<br>University College</span></div>
+			<div class="brand-content">
+				<div class="seal-wrap">
+					<img class="seal" src="assets/Mainlogotransp.png" alt="Marikina University College seal" onerror="this.style.display='none';">
+					<svg class="seal-svg" viewBox="0 0 200 200" role="img" aria-label="Marikina University College seal" xmlns="http://www.w3.org/2000/svg">
+						<defs>
+							<pattern id="sealChecks" width="18" height="18" patternUnits="userSpaceOnUse">
+								<rect width="18" height="18" fill="#fff"/><rect width="9" height="9" fill="#071f3d"/><rect x="9" y="9" width="9" height="9" fill="#071f3d"/>
+							</pattern>
+						</defs>
+						<circle cx="100" cy="100" r="94" fill="#ffd51f" stroke="#071f3d" stroke-width="5"/>
+						<circle cx="100" cy="100" r="78" fill="#fff" stroke="#071f3d" stroke-width="3"/>
+						<path d="M34 83h132v60H34z" fill="url(#sealChecks)" stroke="#071f3d" stroke-width="2"/>
+						<path d="M38 83 69 38l31 45zM100 83l31-45 31 45z" fill="#d52f2f" stroke="#071f3d" stroke-width="2"/>
+						<circle cx="100" cy="114" r="18" fill="none" stroke="#071f3d" stroke-width="3"/>
+						<ellipse cx="100" cy="114" rx="30" ry="10" fill="none" stroke="#071f3d" stroke-width="2" transform="rotate(28 100 114)"/>
+						<ellipse cx="100" cy="114" rx="30" ry="10" fill="none" stroke="#071f3d" stroke-width="2" transform="rotate(-28 100 114)"/>
+						<circle cx="100" cy="114" r="4" fill="#071f3d"/>
+						<text x="100" y="25" fill="#071f3d" font-family="Arial, sans-serif" font-size="11" font-weight="700" text-anchor="middle">MARIKINA UNIVERSITY</text>
+						<text x="100" y="184" fill="#071f3d" font-family="Arial, sans-serif" font-size="13" font-weight="700" text-anchor="middle">COLLEGE • 1947</text>
+					</svg>
+				</div>
+				<p class="eyebrow">Project Registration Portal</p>
+				<h1>Build the work that moves your campus forward.</h1>
+				<p class="brand-copy">A personal project space for registering, organizing, and tracking work from idea to completion.</p>
+			</div>
+			<div class="panel-footer"><span>Established 1947</span><span>Excellence · Service · Integrity</span></div>
+		</section>
+
+		<section class="form-panel" aria-label="Account access">
+			<div class="login-card">
+				<div class="form-view" id="loginView">
+				<span class="card-kicker">MUC secure access</span>
+				<h2>Sign in to continue</h2>
+				<p class="form-intro">Use your project account to access your registration workspace.</p>
+				<form id="loginForm" novalidate>
+					<div class="field">
+						<label for="email">Email address</label>
+						<input id="email" name="email" type="email" autocomplete="username" placeholder="you@example.com" required>
+					</div>
+					<div class="field">
+						<label for="password">Password</label>
+						<div class="input-wrap">
+							<input class="password-input" id="password" name="password" type="password" autocomplete="current-password" placeholder="Enter your password" required>
+							<button class="password-toggle" id="passwordToggle" type="button" aria-label="Show password" title="Show password">◉</button>
+						</div>
+					</div>
+					<div class="form-row">
+						<label class="remember"><input type="checkbox" name="remember"> Remember me</label>
+						<a class="forgot" href="#forgot">Forgot password?</a>
+					</div>
+					<button class="submit" type="submit">Sign in <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6"/></svg></button>
+					<p class="status" id="status" role="status" aria-live="polite"></p>
+				</form>
+				<p class="support">Need help accessing your account? <a href="#support">Contact the project administrator</a></p>
+				<p class="account-switch">Don't have an account? <button id="showSignup" type="button">Create one</button></p>
+				</div>
+
+				<div class="form-view" id="signupView" hidden>
+				<span class="card-kicker">Create your account</span>
+				<h2>Start your workspace</h2>
+				<p class="form-intro">Set up an account to register and track your personal projects.</p>
+				<form id="signupForm" novalidate>
+					<div class="field">
+						<label for="signupName">Full name</label>
+						<input id="signupName" name="name" type="text" autocomplete="name" placeholder="Your full name" required>
+					</div>
+					<div class="field">
+						<label for="signupEmail">Email address</label>
+						<input id="signupEmail" name="email" type="email" autocomplete="email" placeholder="you@example.com" required>
+					</div>
+					<div class="field">
+						<label for="signupPassword">Create password</label>
+						<div class="input-wrap">
+							<input class="password-input" id="signupPassword" name="password" type="password" autocomplete="new-password" placeholder="At least 8 characters" required>
+							<button class="password-toggle" id="signupPasswordToggle" type="button" aria-label="Show password" title="Show password">◉</button>
+						</div>
+					</div>
+					<div class="field">
+						<label for="confirmPassword">Confirm password</label>
+						<input id="confirmPassword" name="confirmPassword" type="password" autocomplete="new-password" placeholder="Repeat your password" required>
+						<small class="password-match" id="passwordMatch" aria-live="polite"></small>
+					</div>
+					<label class="terms"><input id="terms" name="terms" type="checkbox" required><span>I agree to the <a href="#terms">project terms</a> and understand this is a personal workspace.</span></label>
+					<button class="submit" type="submit">Create account <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6"/></svg></button>
+					<p class="status" id="signupStatus" role="status" aria-live="polite"></p>
+				</form>
+				<p class="account-switch">Already have an account? <button id="showLogin" type="button">Sign in</button></p>
+				</div>
+			</div>
+		</section>
+	</main>
+
+	<section class="dashboard" id="dashboard" hidden aria-label="Report card dashboard">
+		<header class="dashboard-header">
+			<div class="dashboard-brand"><img src="assets/Mainlogotransp.png" alt=""><span>Marikina University College<br><small>Report Card Portal</small></span></div>
+			<div class="dashboard-user"><span id="dashboardUserName">Student account</span><span class="avatar" id="dashboardAvatar">S</span><button class="logout" id="logout" type="button">Log out</button></div>
+		</header>
+		<div class="dashboard-body">
+			<div class="dashboard-intro">
+				<div><p class="eyebrow">Academic overview</p><h1>Good morning, <span id="dashboardGreeting">Student</span>.</h1><p>Here is your latest academic progress and report card activity.</p></div>
+				<select class="term-select" aria-label="Select academic term"><option>Academic Year 2025–2026 · Term 2</option><option>Academic Year 2025–2026 · Term 1</option></select>
+			</div>
+			<div class="dashboard-grid">
+				<article class="dashboard-card summary-card"><span class="summary-label">General average</span><div class="summary-value">91.4</div><div class="summary-note">↑ 2.3 from last term</div></article>
+				<article class="dashboard-card summary-card"><span class="summary-label">Units completed</span><div class="summary-value">18 / 24</div><div class="summary-note">75% of this term</div></article>
+				<article class="dashboard-card summary-card"><span class="summary-label">Standing</span><div class="summary-value">Good</div><div class="summary-note">Eligible for enrollment</div></article>
+				<article class="dashboard-card summary-card"><span class="summary-label">Attendance</span><div class="summary-value">96%</div><div class="summary-note">Excellent consistency</div></article>
+
+				<article class="dashboard-card results-card">
+					<div class="card-heading"><h2>Current term results</h2><a href="#report-card">View report card →</a></div>
+					<table class="results-table"><thead><tr><th>Subject name</th><th>Grade</th><th>Teacher</th><th>Term / semester</th><th>GPA</th><th>Attendance</th><th>Remarks</th></tr></thead><tbody>
+						<tr><td><strong>Business Law &amp; Taxation</strong><br><small>ECC12</small></td><td class="grade">94</td><td>Prof. D. Reyes</td><td>Term 2</td><td class="grade">1.50</td><td>98%</td><td><span class="status-badge">Passed</span></td></tr>
+						<tr><td><strong>Project Management</strong><br><small>PM101</small></td><td class="grade">92</td><td>Prof. A. Santos</td><td>Term 2</td><td class="grade">1.75</td><td>96%</td><td><span class="status-badge">Passed</span></td></tr>
+						<tr><td><strong>Technical Communication</strong><br><small>TC105</small></td><td class="grade">90</td><td>Prof. M. Cruz</td><td>Term 2</td><td class="grade">2.00</td><td>95%</td><td><span class="status-badge">Passed</span></td></tr>
+						<tr><td><strong>Research Methods</strong><br><small>RM110</small></td><td class="grade">89</td><td>Prof. J. Garcia</td><td>Term 2</td><td class="grade">2.25</td><td>94%</td><td><span class="status-badge">Passed</span></td></tr>
+					</tbody></table>
+				</article>
+				<article class="dashboard-card announcements-card"><div class="card-heading"><h2>Announcements</h2><a href="#announcements">See all</a></div><div class="announcement"><strong>Report cards are available</strong><span>Your Term 2 report card was released today.</span></div><div class="announcement"><strong>Enrollment period</strong><span>Next term enrollment opens on June 16.</span></div><div class="announcement"><strong>Records update</strong><span>Keep your contact details current before requesting documents.</span></div></article>
+				<div class="quick-actions"><button class="action" type="button">Download report card <span>↓</span></button><button class="action" type="button">Request academic record <span>→</span></button><button class="action" type="button">Update profile <span>→</span></button></div>
+			</div>
+		</div>
+	</section>
+
+	<script>
+		const form = document.getElementById('loginForm');
+		const email = document.getElementById('email');
+		const password = document.getElementById('password');
+		const passwordToggle = document.getElementById('passwordToggle');
+		const status = document.getElementById('status');
+		const loginView = document.getElementById('loginView');
+		const signupView = document.getElementById('signupView');
+		const signupForm = document.getElementById('signupForm');
+		const signupPassword = document.getElementById('signupPassword');
+		const confirmPassword = document.getElementById('confirmPassword');
+		const signupStatus = document.getElementById('signupStatus');
+		const passwordMatch = document.getElementById('passwordMatch');
+		const portal = document.querySelector('.portal');
+		const dashboard = document.getElementById('dashboard');
+		const dashboardUserName = document.getElementById('dashboardUserName');
+		const dashboardGreeting = document.getElementById('dashboardGreeting');
+		const dashboardAvatar = document.getElementById('dashboardAvatar');
+
+		function showDashboard(name){
+			const displayName = name || 'Student';
+			window.location.href = `dashboard.html?name=${encodeURIComponent(displayName)}`;
+		}
+
+		document.getElementById('logout').addEventListener('click', () => {
+			dashboard.hidden = true;
+			portal.hidden = false;
+			switchView('login');
+			email.focus();
+		});
+
+		function updatePasswordMatch(){
+			passwordMatch.className = 'password-match';
+			passwordMatch.textContent = '';
+			if(!confirmPassword.value) return;
+			const matches = signupPassword.value === confirmPassword.value;
+			passwordMatch.classList.add(matches ? 'match' : 'mismatch');
+			passwordMatch.textContent = matches ? 'Passwords match.' : 'Passwords do not match.';
+		}
+
+		signupPassword.addEventListener('input', updatePasswordMatch);
+		confirmPassword.addEventListener('input', updatePasswordMatch);
+
+		function switchView(view) {
+			const showSignup = view === 'signup';
+			loginView.hidden = showSignup;
+			signupView.hidden = !showSignup;
+			(showSignup ? document.getElementById('signupName') : email).focus();
+		}
+
+		document.getElementById('showSignup').addEventListener('click', () => switchView('signup'));
+		document.getElementById('showLogin').addEventListener('click', () => switchView('login'));
+
+		passwordToggle.addEventListener('click', () => {
+			const isPassword = password.type === 'password';
+			password.type = isPassword ? 'text' : 'password';
+			passwordToggle.textContent = isPassword ? '◌' : '◉';
+			passwordToggle.setAttribute('aria-label', isPassword ? 'Hide password' : 'Show password');
+			passwordToggle.setAttribute('title', isPassword ? 'Hide password' : 'Show password');
+		});
+
+		document.getElementById('signupPasswordToggle').addEventListener('click', event => {
+			const isPassword = signupPassword.type === 'password';
+			signupPassword.type = isPassword ? 'text' : 'password';
+			event.currentTarget.textContent = isPassword ? '◌' : '◉';
+			event.currentTarget.setAttribute('aria-label', isPassword ? 'Hide password' : 'Show password');
+			event.currentTarget.setAttribute('title', isPassword ? 'Hide password' : 'Show password');
+		});
+
+		form.addEventListener('submit', async event => {
+			event.preventDefault();
+			status.textContent = '';
+			if (!email.value.trim() || !password.value) {
+				status.textContent = 'Please enter your email and password.';
+				(!email.value.trim() ? email : password).focus();
+				return;
+			}
+			if (!email.validity.valid) {
+				status.textContent = 'Please enter a valid email address.';
+				email.focus();
+				return;
+			}
+			const { data, error } = await supabaseClient.auth.signInWithPassword({
+				email: email.value.trim().toLowerCase(),
+				password: password.value
+			});
+			if(error){
+				status.style.color = '';
+				status.textContent = error.message.includes('Invalid login credentials') ? 'Incorrect email or password.' : error.message;
+				password.focus();
+				return;
+			}
+			status.style.color = '#28704a';
+			status.textContent = 'Signed in successfully.';
+			const { data: profile } = await supabaseClient.from('profiles').select('full_name, role').eq('id', data.user.id).maybeSingle();
+			setTimeout(() => {
+				const displayName = profile?.full_name || data.user.user_metadata?.full_name || 'Student';
+				if(profile?.role === 'teacher') window.location.href = `gradebook.html?name=${encodeURIComponent(displayName)}`;
+				else showDashboard(displayName);
+			}, 350);
+		});
+
+		signupForm.addEventListener('submit', async event => {
+			event.preventDefault();
+			signupStatus.style.color = '';
+			signupStatus.textContent = '';
+			if(!signupForm.checkValidity()){
+				signupStatus.textContent = 'Please complete all required fields.';
+				const firstInvalid = signupForm.querySelector(':invalid');
+				if(firstInvalid) firstInvalid.focus();
+				return;
+			}
+			if(signupPassword.value.length < 8){
+				signupStatus.textContent = 'Your password must be at least 8 characters.';
+				signupPassword.focus();
+				return;
+			}
+			if(signupPassword.value !== confirmPassword.value){
+				signupStatus.textContent = 'The passwords do not match.';
+				confirmPassword.focus();
+				return;
+			}
+			const { data, error } = await supabaseClient.auth.signUp({
+				email: document.getElementById('signupEmail').value.trim().toLowerCase(),
+				password: signupPassword.value,
+				options: { data: { full_name: document.getElementById('signupName').value.trim() } }
+			});
+			if(error){
+				signupStatus.textContent = error.message;
+				return;
+			}
+			if(data.user){
+				await supabaseClient.from('profiles').upsert({
+					id: data.user.id,
+					full_name: document.getElementById('signupName').value.trim(),
+				});
+			}
+			signupStatus.style.color = '#28704a';
+			signupStatus.textContent = 'Account created successfully.';
+			setTimeout(() => {
+				dashboard.hidden = true;
+				portal.hidden = false;
+				switchView('login');
+				email.value = document.getElementById('signupEmail').value;
+				password.value = '';
+				status.style.color = '#28704a';
+				status.textContent = 'Account created. Please sign in to continue.';
+				password.focus();
+			}, 350);
+		});
+	</script>
+</body>
+</html>
