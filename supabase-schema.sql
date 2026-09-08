@@ -7,6 +7,7 @@ create table if not exists public.profiles (
   section text,
   program text,
   year_level text,
+  enrollment_status text not null default 'active' check (enrollment_status in ('active', 'dropped_out')),
   phone text,
   guardian_name text,
   guardian_phone text,
@@ -31,6 +32,7 @@ create table if not exists public.grades (
   gpa numeric(4,2),
   attendance numeric(5,2) check (attendance between 0 and 100),
   remarks text,
+  published boolean not null default false,
   created_at timestamptz not null default now(),
   unique(student_id, subject_id)
 );
@@ -38,6 +40,7 @@ create table if not exists public.grades (
 create table if not exists public.enrollments (
   student_id uuid not null references public.profiles(id) on delete cascade,
   subject_id bigint not null references public.subjects(id) on delete cascade,
+  enrollment_status text not null default 'active' check (enrollment_status in ('active', 'dropped_out')),
   enrolled_at timestamptz not null default now(),
   primary key (student_id, subject_id)
 );
@@ -49,11 +52,29 @@ create table if not exists public.teacher_allowlist (
 
 create table if not exists public.account_allowlist (
   email text primary key,
-  role text not null check (role in ('student', 'teacher')),
+  role text not null check (role in ('student', 'teacher', 'admin')),
   created_at timestamptz not null default now()
 );
 
+alter table public.account_allowlist drop constraint if exists account_allowlist_role_check;
+alter table public.account_allowlist add constraint account_allowlist_role_check check (role in ('student', 'teacher', 'admin'));
+
 alter table public.profiles add column if not exists section text;
+alter table public.profiles add column if not exists enrollment_status text not null default 'active';
+alter table public.enrollments add column if not exists enrollment_status text not null default 'active';
+do $$
+begin
+  alter table public.profiles add constraint profiles_enrollment_status_check check (enrollment_status in ('active', 'dropped_out'));
+exception
+  when duplicate_object then null;
+end $$;
+do $$
+begin
+  alter table public.enrollments add constraint enrollments_status_check check (enrollment_status in ('active', 'dropped_out'));
+exception
+  when duplicate_object then null;
+end $$;
+alter table public.grades add column if not exists published boolean not null default false;
 
 alter table public.profiles enable row level security;
 alter table public.subjects enable row level security;
@@ -80,6 +101,14 @@ as $$
   select exists (
     select 1 from public.subjects
     where id = requested_subject_id and teacher_id = auth.uid()
+  ) or exists (
+    select 1
+    from public.subjects s
+    join public.profiles p on p.id = auth.uid()
+    where s.id = requested_subject_id
+      and s.code = 'ECC12'
+      and p.role = 'teacher'
+      and p.full_name = 'Mr. Vanie Santos'
   );
 $$;
 
@@ -116,21 +145,31 @@ drop policy if exists "Users can view their own profile" on public.profiles;
 drop policy if exists "Users can create their own profile" on public.profiles;
 drop policy if exists "Users can update their own profile" on public.profiles;
 drop policy if exists "Teachers can view student profiles" on public.profiles;
+drop policy if exists "Teachers can update student profiles" on public.profiles;
 drop policy if exists "Signed in users can view subjects" on public.subjects;
 drop policy if exists "Students can view their own grades" on public.grades;
 drop policy if exists "Teachers can manage grades" on public.grades;
 drop policy if exists "Students can view their enrollments" on public.enrollments;
 drop policy if exists "Teachers can view subject enrollments" on public.enrollments;
+drop policy if exists "Teachers can update subject enrollments" on public.enrollments;
+drop policy if exists "Teachers can manage subject enrollments" on public.enrollments;
 drop policy if exists "Teachers can manage assigned grades" on public.grades;
 
 create policy "Users can view their own profile" on public.profiles for select using (auth.uid() = id);
 create policy "Users can create their own profile" on public.profiles for insert with check (auth.uid() = id);
 create policy "Users can update their own profile" on public.profiles for update using (auth.uid() = id);
 create policy "Teachers can view student profiles" on public.profiles for select using (auth.uid() = id or public.is_teacher());
+create policy "Teachers can update student profiles" on public.profiles for update using (public.is_teacher());
 create policy "Signed in users can view subjects" on public.subjects for select to authenticated using (true);
-create policy "Students can view their own grades" on public.grades for select using (auth.uid() = student_id);
+create policy "Students can view their own grades" on public.grades for select using (auth.uid() = student_id and published = true);
 create policy "Students can view their enrollments" on public.enrollments for select using (auth.uid() = student_id);
 create policy "Teachers can view subject enrollments" on public.enrollments for select using (public.is_subject_teacher(subject_id));
+create policy "Teachers can manage subject enrollments" on public.enrollments for all
+using (public.is_subject_teacher(subject_id))
+with check (
+  public.is_subject_teacher(subject_id)
+  and exists (select 1 from public.profiles where id = enrollments.student_id and role = 'student')
+);
 create policy "Teachers can manage assigned grades" on public.grades for all
 using (
   public.is_subject_teacher(subject_id)
@@ -151,13 +190,40 @@ values
   ('RM110', 'Research Methods', 'Term 2')
 on conflict (code) do nothing;
 
--- Approved teacher accounts.
+-- Approved teacher accounts. agentblacks17@gmail.com is Mr. Vanie Santos for ECC12.
+delete from public.account_allowlist
+where lower(email) in ('santos@gmail.com', 'van@gmail.com', 'agentblacks17@gmail.com');
+
 insert into public.account_allowlist (email, role)
 values
   ('santos@gmail.com', 'teacher'),
   ('van@gmail.com', 'teacher'),
-  ('agentblacks17@gmail.com', 'teacher')
+  ('agentblacks17@gmail.com', 'teacher'),
+  ('student01@example.com', 'student'),
+  ('student02@example.com', 'student'),
+  ('student03@example.com', 'student'),
+  ('student04@example.com', 'student'),
+  ('student05@example.com', 'student'),
+  ('student06@example.com', 'student'),
+  ('student07@example.com', 'student'),
+  ('student08@example.com', 'student'),
+  ('student09@example.com', 'student'),
+  ('student10@example.com', 'student')
 on conflict (email) do update set role = excluded.role;
+
+update public.profiles
+set role = 'teacher', full_name = 'Mr. Vanie Santos'
+where id in (
+  select id from auth.users
+  where lower(email) = lower('agentblacks17@gmail.com')
+);
+
+update public.profiles
+set role = 'teacher', full_name = 'Ms. Mia Santos'
+where id in (
+  select id from auth.users
+  where lower(email) = lower('santos@gmail.com')
+);
 
 -- Apply allowlist roles to accounts that already exist.
 update public.profiles p
@@ -166,27 +232,11 @@ from public.account_allowlist a
 join auth.users u on lower(u.email) = lower(a.email)
 where p.id = u.id;
 
--- Assign ECC12 to the teacher after that account exists:
+-- Assign each unit to its teacher after the accounts exist.
 update public.subjects
 set teacher_id = (select id from auth.users where lower(email) = lower('agentblacks17@gmail.com'))
 where code = 'ECC12'
   and exists (select 1 from auth.users where lower(email) = lower('agentblacks17@gmail.com'));
-
-update public.profiles
-set full_name = 'Mr. Vanie Santos'
-where id = (select id from auth.users where lower(email) = lower('agentblacks17@gmail.com'));
-
-update public.profiles
-set full_name = 'Raqueim Carlos'
-where id = (select id from auth.users where lower(email) = lower('van@gmail.com'));
-
-update public.profiles
-set full_name = 'Ms. Mia Santos'
-where id = (select id from auth.users where lower(email) = lower('santos@gmail.com'));
-
-update public.profiles
-set full_name = 'Jovanie Santos', section = '4-9'
-where id = (select id from auth.users where lower(email) = lower('jovanierams@gmail.com'));
 
 update public.subjects
 set teacher_id = (select id from auth.users where lower(email) = lower('van@gmail.com'))
@@ -194,9 +244,28 @@ where code = 'PM101'
   and exists (select 1 from auth.users where lower(email) = lower('van@gmail.com'));
 
 update public.subjects
+set teacher_id = null
+where code = 'RM110';
+
+update public.subjects
 set teacher_id = (select id from auth.users where lower(email) = lower('santos@gmail.com'))
 where code = 'RM110'
   and exists (select 1 from auth.users where lower(email) = lower('santos@gmail.com'));
+
+update public.profiles
+set full_name = 'Mr. Vanie Santos'
+where id in (
+  select id from auth.users
+  where lower(email) = lower('agentblacks17@gmail.com')
+);
+
+update public.profiles
+set full_name = 'Raqueim Carlos'
+where id = (select id from auth.users where lower(email) = lower('van@gmail.com'));
+
+update public.profiles
+set full_name = 'Jovanie Santos', section = '4-9'
+where id = (select id from auth.users where lower(email) = lower('jovanierams@gmail.com'));
 
 insert into public.enrollments (student_id, subject_id)
 select u.id, s.id
@@ -204,4 +273,35 @@ from auth.users u
 cross join public.subjects s
 where lower(u.email) = lower('jovanierams@gmail.com')
   and s.code in ('ECC12', 'PM101', 'RM110')
+on conflict do nothing;
+
+-- Demo student profiles and enrollments. Create these emails in Supabase Auth first.
+update public.profiles p
+set full_name = demo.full_name, student_id = demo.student_id, section = demo.section
+from (values
+  ('student01@example.com', 'Demo Student 01', 'DEMO-0001', '4-1'),
+  ('student02@example.com', 'Demo Student 02', 'DEMO-0002', '4-1'),
+  ('student03@example.com', 'Demo Student 03', 'DEMO-0003', '4-2'),
+  ('student04@example.com', 'Demo Student 04', 'DEMO-0004', '4-2'),
+  ('student05@example.com', 'Demo Student 05', 'DEMO-0005', '4-3'),
+  ('student06@example.com', 'Demo Student 06', 'DEMO-0006', '4-3'),
+  ('student07@example.com', 'Demo Student 07', 'DEMO-0007', '4-4'),
+  ('student08@example.com', 'Demo Student 08', 'DEMO-0008', '4-4'),
+  ('student09@example.com', 'Demo Student 09', 'DEMO-0009', '4-5'),
+  ('student10@example.com', 'Demo Student 10', 'DEMO-0010', '4-5')
+) as demo(email, full_name, student_id, section)
+join auth.users u on lower(u.email) = lower(demo.email)
+where p.id = u.id;
+
+insert into public.enrollments (student_id, subject_id)
+select u.id, s.id
+from auth.users u
+cross join public.subjects s
+where lower(u.email) in (
+  'student01@example.com', 'student02@example.com', 'student03@example.com',
+  'student04@example.com', 'student05@example.com', 'student06@example.com',
+  'student07@example.com', 'student08@example.com', 'student09@example.com',
+  'student10@example.com'
+)
+and s.code in ('ECC12', 'PM101', 'RM110')
 on conflict do nothing;

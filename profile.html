@@ -37,9 +37,44 @@ const fields=['fullName','studentId','email','phone','program','yearLevel','guar
 	document.getElementById('guardianPhone').value=values.guardian_phone||'';
 	document.getElementById('address').value=values.address||'';
 	localStorage.removeItem('student-profile');
-	document.getElementById('fullName').dispatchEvent(new Event('input'));
-	document.getElementById('program').dispatchEvent(new Event('input'));
+	document.getElementById('profileName').textContent=document.getElementById('fullName').value||'Student account';
+	document.getElementById('profileProgram').textContent=document.getElementById('program').value||'Student profile';
+	document.getElementById('avatar').textContent=(document.getElementById('fullName').value||'S').trim().charAt(0).toUpperCase();
 })();
+</script>
+<script>
+(async()=>{
+	const yearLevel=document.getElementById('yearLevel');
+	const sectionField=document.createElement('div');
+	sectionField.className='field';
+	sectionField.innerHTML='<label for="section">Section</label><select id="section" required><option value="">Select your section</option><option>4-1</option><option>4-2</option><option>4-3</option><option>4-4</option><option>4-5</option><option>4-6</option><option>4-7</option><option>4-8</option><option>4-9</option><option>4-10</option><option>4-11</option><option>4-12</option></select>';
+	yearLevel.closest('.field').after(sectionField);
+	const section=document.getElementById('section');
+	const submitButton=document.querySelector('#profileForm button[type="submit"]');
+	submitButton.textContent='Apply changes';
+	const {data:{session}}=await supabaseClient.auth.getSession();
+	if(session){const {data:profile}=await supabaseClient.from('profiles').select('section').eq('id',session.user.id).maybeSingle();section.value=profile?.section||'';}
+	document.getElementById('profileForm').addEventListener('submit',async event=>{
+		event.preventDefault();
+		event.stopImmediatePropagation();
+		const form=document.getElementById('profileForm');
+		if(!form.checkValidity()){form.reportValidity();return;}
+		const data={};['fullName','studentId','email','phone','program','yearLevel','section','guardian','guardianPhone','address'].forEach(id=>data[id]=document.getElementById(id).value);
+		localStorage.setItem('student-profile',JSON.stringify(data));
+		const {data:sessionData}=await supabaseClient.auth.getSession();
+		if(sessionData.session){const {error}=await supabaseClient.from('profiles').upsert({id:sessionData.session.user.id,full_name:data.fullName,student_id:data.studentId,section:data.section,program:data.program,year_level:data.yearLevel,phone:data.phone,guardian_name:data.guardian,guardian_phone:data.guardianPhone,address:data.address});if(error){document.getElementById('saveMessage').textContent=error.message;return;}}
+		document.getElementById('profileName').textContent=data.fullName||'Student account';
+		document.getElementById('profileProgram').textContent=data.program||'Student profile';
+		document.getElementById('avatar').textContent=(data.fullName||'S').trim().charAt(0).toUpperCase();
+		document.getElementById('saveMessage').textContent='Changes applied successfully.';
+	},true);
+})();
+</script>
+<script>
+const fullNameField=document.getElementById('fullName');
+const programField=document.getElementById('program');
+fullNameField.addEventListener('input',event=>event.stopImmediatePropagation(),true);
+programField.addEventListener('input',event=>event.stopImmediatePropagation(),true);
 </script>
 </body>
 </html>
