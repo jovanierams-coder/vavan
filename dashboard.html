@@ -27,6 +27,28 @@
     .status-badge.dropped-badge{color:#8c2525;background:#fff1f1}.quick-actions .action,.quick-actions .action span{font-size:.7rem!important}.system-tray .tray-shell{background:linear-gradient(145deg,#f3d998 0%,#c18a48 48%,#8e5b2d 100%);border:2px solid rgba(255,239,183,.8);box-shadow:0 16px 28px rgba(36,35,38,.2),0 0 0 5px rgba(109,29,40,.12),inset 0 2px 10px rgba(255,248,215,.9);transition:transform .25s ease,box-shadow .25s ease;isolation:isolate}.system-tray .tray-shell::before{content:"";position:absolute;inset:-8px;border:1px solid rgba(199,155,98,.55);border-radius:50%;box-shadow:0 0 14px rgba(199,155,98,.4);animation:none;pointer-events:none}.system-tray .tray-shell::after{content:"";position:absolute;inset:4px;border-radius:50%;border:1px solid rgba(255,247,211,.45);pointer-events:none}.system-tray.is-open .tray-shell::before{animation:trayHalo 2.8s ease-out infinite}.notification-panel.open{animation:notificationPop .22s ease-out both}.system-tray:hover .tray-shell{transform:translateY(-5px) scale(1.06);box-shadow:0 22px 34px rgba(36,35,38,.24),0 0 0 6px rgba(109,29,40,.16),0 0 24px rgba(199,155,98,.5),inset 0 2px 10px rgba(255,248,215,.9)}.system-tray .tray-shell .bell{position:relative;z-index:1;background:linear-gradient(135deg,#a42b32,#5f1721);color:#f8dda0;box-shadow:inset 0 2px 8px rgba(255,255,255,.22),0 8px 18px rgba(109,29,40,.3);transition:transform .25s ease}.system-tray:hover .tray-shell .bell{transform:rotate(-10deg) scale(1.08)}.system-tray .tray-shell .badge{animation:badgePulse 1.8s ease-in-out infinite}.system-tray:focus-within .tray-shell{outline:3px solid rgba(199,155,98,.42);outline-offset:4px}@keyframes trayHalo{0%{transform:scale(.9);opacity:.8}70%,100%{transform:scale(1.25);opacity:0}}@keyframes badgePulse{0%,100%{transform:scale(1)}50%{transform:scale(1.12)}}@keyframes notificationPop{from{opacity:0;transform:translateY(8px) scale(.97)}to{opacity:1;transform:translateY(0) scale(1)}}
     .system-tray{right:26px;bottom:22px}.system-tray .tray-shell{width:68px;height:68px;box-shadow:0 16px 28px rgba(36,35,38,.14),0 0 0 6px rgba(255,255,255,.28),inset 0 2px 10px rgba(255,255,255,.9)}.system-tray .tray-shell .bell{width:34px;height:34px;font-size:1rem}.system-tray .tray-shell .badge{right:-6px;bottom:-4px;width:22px;height:22px;font-size:.64rem;box-shadow:0 10px 18px rgba(216,31,61,.45),0 0 0 3px rgba(255,255,255,.9)}.notification-panel{right:30px;bottom:100px;width:300px;max-height:320px}.notification-panel .panel-header{padding:12px 14px}.notification-panel .panel-header strong{font-size:.82rem}.notification-panel .panel-header span{font-size:.68rem}.notification-list{max-height:270px;padding:10px}.notification-item{padding:12px 10px}.notification-item strong{font-size:.76rem}
     .notification-item time{display:block;margin-top:3px;color:var(--burgundy);font-size:.62rem;font-weight:700;letter-spacing:.03em}.system-tray .tray-shell::before{animation:trayPulse 2.4s ease-in-out infinite}.notification-panel{display:block;opacity:0;visibility:hidden;pointer-events:none;transform:translateY(8px) scale(.97);animation:none;transition:opacity .22s ease,visibility .22s ease,transform .22s ease}.notification-panel.open{opacity:1;visibility:visible;pointer-events:auto;transform:translateY(0) scale(1);animation:notificationPop .22s ease-out both}@keyframes trayPulse{0%,100%{transform:scale(.96);opacity:.55}50%{transform:scale(1.08);opacity:1}}
+    .system-tray{right:26px;bottom:22px}
+    .system-tray{padding:0;border:0;color:inherit;background:transparent;font:inherit}
+    .system-tray .tray-shell{padding:0;color:inherit;font:inherit;cursor:pointer}
+    .notification-panel{width:min(390px,calc(100vw - 32px));max-height:min(520px,calc(100vh - 132px));border:1px solid rgba(109,29,40,.16);border-radius:18px;background:#fff;box-shadow:0 28px 70px rgba(36,35,38,.28),0 5px 18px rgba(109,29,40,.12)}
+    .notification-panel .panel-header{position:relative;gap:14px;align-items:center;padding:18px 18px 16px;color:#fff;background:linear-gradient(125deg,#242326 0%,#4a2027 64%,#6d1d28 100%);border:0}
+    .notification-panel .panel-header::after{content:"";position:absolute;right:-22px;top:-36px;width:130px;height:130px;border:1px solid rgba(255,255,255,.12);border-radius:50%;box-shadow:0 0 0 16px rgba(255,255,255,.035),0 0 0 34px rgba(255,255,255,.025);pointer-events:none}
+    .panel-title{display:flex;align-items:center;gap:11px;min-width:0}
+    .notification-mark{display:grid;place-items:center;flex:0 0 40px;width:40px;height:40px;border:1px solid rgba(255,231,179,.55);border-radius:12px;color:#ffdfa0;background:linear-gradient(145deg,#a7443c,#6d1d28);font-size:1.15rem;box-shadow:inset 0 1px 0 rgba(255,255,255,.24),0 7px 18px rgba(0,0,0,.2)}
+    .notification-panel .panel-title small{display:block;margin-bottom:3px;color:#e7c995;font-size:.57rem;font-weight:800;letter-spacing:.14em}
+    .notification-panel .panel-title strong{display:block;color:#fff;font:700 1rem 'Space Grotesk',sans-serif}
+    .notification-panel .panel-header>span{position:relative;z-index:1;flex:0 0 auto;border:1px solid rgba(255,255,255,.24);border-radius:99px;padding:6px 9px;color:#fff;background:rgba(255,255,255,.1);font-size:.64rem;font-weight:700}
+    .notification-list{max-height:420px;padding:10px;background:linear-gradient(180deg,#faf8f6,#fff 32%)}
+    .notification-item{position:relative;margin:6px 0;padding:13px 13px 13px 16px;border:1px solid #e8e1db;border-radius:11px;background:#fff;box-shadow:0 4px 12px rgba(36,35,38,.045);transition:transform .18s ease,border-color .18s ease,box-shadow .18s ease}
+    .notification-item:hover{transform:translateY(-2px);border-color:#c79b62;box-shadow:0 9px 20px rgba(36,35,38,.09)}
+    .notification-item.is-new{border-color:#d9b875;background:linear-gradient(105deg,#fffaf0,#fff 72%)}
+    .notification-item.is-new::before{content:"";position:absolute;left:0;top:12px;bottom:12px;width:3px;border-radius:0 3px 3px 0;background:linear-gradient(#d6ae66,#8f2f34)}
+    .notification-item strong{padding-right:34px;color:#292528;font-size:.83rem;line-height:1.35}
+    .notification-item time{display:block;margin-top:5px;color:#8c5a37;font-size:.63rem;font-weight:700}
+    .notification-item small{margin-top:8px;color:#6d6a68;font-size:.75rem;line-height:1.55}
+    .system-tray .tray-shell:focus-visible{outline:3px solid #6d1d28;outline-offset:5px}
+    @media(max-width:520px){.system-tray{right:18px;bottom:18px}.notification-panel{right:12px;bottom:94px;width:calc(100vw - 24px);max-height:calc(100vh - 112px)}.notification-list{max-height:calc(100vh - 205px)}}
+    @media(prefers-reduced-motion:reduce){.system-tray .tray-shell,.system-tray .tray-shell .bell,.notification-panel,.notification-item{transition:none!important;animation:none!important}.system-tray .tray-shell::before,.system-tray .tray-shell .badge{animation:none!important}}
   </style>
 </head>
 <body>
@@ -42,11 +64,11 @@
         <article class="dashboard-card summary-card"><span class="summary-label">Enrolled units</span><div class="summary-value" id="unitsCompleted">-</div><div class="summary-note" id="unitsNote">Checking enrollments</div></article>
         <article class="dashboard-card summary-card"><span class="summary-label">Enrollment status</span><div class="summary-value" id="standingValue">-</div><div class="summary-note" id="standingNote">Current student status</div></article>
         <article class="dashboard-card results-card" id="report-card"><div class="card-heading report-card-heading"><div class="report-card-brand"><img class="report-card-seal" src="assets/Mainlogotransp.png" alt="Marikina University College seal"><div><p class="eyebrow">Official academic record</p><h2 id="reportCardTitle">Term 2 report card</h2><span class="card-subtitle" id="reportCardSubtitle">Published grades, GPA, and enrollment status</span></div></div><a href="#report-card" id="reportCardLink">Current term</a></div><table class="results-table"><thead><tr><th>Subject name</th><th>Grade</th><th>Teacher</th><th>Term / semester</th><th>GPA</th><th>Remarks</th><th>Status</th></tr></thead><tbody id="resultsBody"><tr><td colspan="7">Loading enrollments...</td></tr></tbody></table></article>
-        <div class="system-tray" id="notificationTray" aria-label="Unread announcements">
+        <button class="system-tray" id="notificationTray" type="button" aria-label="Open announcements" aria-controls="notificationPanel" aria-expanded="false">
           <div class="tray-shell"><span class="bell">🔔</span><span class="badge">3</span></div>
-        </div>
-        <aside class="notification-panel" id="notificationPanel" aria-live="polite">
-          <div class="panel-header"><strong>Announcements</strong><span id="notificationSummary">Loading...</span></div>
+        </button>
+        <aside class="notification-panel" id="notificationPanel" aria-live="polite" aria-label="Student announcements">
+          <div class="panel-header"><div class="panel-title"><span class="notification-mark" aria-hidden="true">✦</span><div><small>STUDENT BULLETIN</small><strong>Announcements</strong></div></div><span id="notificationSummary">Loading...</span></div>
           <div class="notification-list" id="notificationList"><div class="notification-item"><small>Loading announcements...</small></div></div>
         </aside>
         <div class="quick-actions"><button class="action" id="downloadPdf" type="button"><span>Download PDF</span></button><button class="action" id="downloadImage" type="button"><span>Download image</span></button></div>
@@ -73,16 +95,19 @@
       const notificationPanel = document.getElementById('notificationPanel');
       const trayShell = notificationTray.querySelector('.tray-shell');
       const notificationList = document.getElementById('notificationList');
-      const notificationHeader = notificationPanel.querySelector('.panel-header span');
+      const notificationHeader = document.getElementById('notificationSummary');
       const announcementsReadKey = `announcements-read-${studentId}`;
       let trayBadge = trayShell.querySelector('.badge');
       let studentAnnouncements = [];
       const escapeHtml = value => String(value).replace(/[&<>'"]/g, character => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[character]));
       const formatAnnouncementDate = value => { const date = new Date(value); return `${date.toLocaleString('en-US', {month: 'long'})} ${String(date.getDate()).padStart(2, '0')}, ${date.getFullYear()} at ${date.toLocaleTimeString('en-US', {hour: 'numeric', minute: '2-digit'})}`; };
       const renderStudentAnnouncements = () => {
-        notificationList.innerHTML = studentAnnouncements.length ? studentAnnouncements.map(announcement => `<div class="notification-item"><strong>${escapeHtml(announcement.title)}</strong><time datetime="${escapeHtml(announcement.created_at)}">${formatAnnouncementDate(announcement.created_at)}</time><small>${escapeHtml(announcement.message)}</small></div>`).join('') : '<div class="notification-item"><small>No announcements yet.</small></div>';
         const lastReadAt = localStorage.getItem(announcementsReadKey);
         const unreadCount = studentAnnouncements.filter(announcement => !lastReadAt || announcement.created_at > lastReadAt).length;
+        notificationList.innerHTML = studentAnnouncements.length ? studentAnnouncements.map(announcement => {
+          const isNew = !lastReadAt || announcement.created_at > lastReadAt;
+          return `<div class="notification-item${isNew ? ' is-new' : ''}"><strong>${escapeHtml(announcement.title)}</strong><time datetime="${escapeHtml(announcement.created_at)}">${formatAnnouncementDate(announcement.created_at)}</time><small>${escapeHtml(announcement.message)}</small></div>`;
+        }).join('') : '<div class="notification-item"><small>No announcements yet.</small></div>';
         if (unreadCount) {
           if (!trayBadge) { trayBadge = document.createElement('span'); trayBadge.className = 'badge'; trayShell.appendChild(trayBadge); }
           trayBadge.textContent = unreadCount;
@@ -95,6 +120,7 @@
       notificationTray.addEventListener('click', () => {
         notificationPanel.classList.toggle('open');
         notificationTray.classList.toggle('is-open', notificationPanel.classList.contains('open'));
+        notificationTray.setAttribute('aria-expanded', String(notificationPanel.classList.contains('open')));
         if (notificationPanel.classList.contains('open')) {
           localStorage.setItem(announcementsReadKey, new Date().toISOString());
           renderStudentAnnouncements();
@@ -105,6 +131,15 @@
         if (!notificationPanel.contains(event.target) && !notificationTray.contains(event.target)) {
           notificationPanel.classList.remove('open');
           notificationTray.classList.remove('is-open');
+          notificationTray.setAttribute('aria-expanded', 'false');
+        }
+      });
+      document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape' && notificationPanel.classList.contains('open')) {
+          notificationPanel.classList.remove('open');
+          notificationTray.classList.remove('is-open');
+          notificationTray.setAttribute('aria-expanded', 'false');
+          notificationTray.focus();
         }
       });
 
@@ -151,6 +186,7 @@
           if (hasNewAnnouncement && !notificationPanel.classList.contains('open')) {
             notificationPanel.classList.add('open');
             notificationTray.classList.add('is-open');
+            notificationTray.setAttribute('aria-expanded', 'true');
           }
         }
       }, 5000);
@@ -228,8 +264,14 @@
           const canvas = await captureReportCard();
           const imageData = canvas.toDataURL('image/png');
           const {jsPDF} = window.jspdf;
-          const pdf = new jsPDF({orientation: 'landscape', unit: 'px', format: [canvas.width, canvas.height]});
-          pdf.addImage(imageData, 'PNG', 0, 0, canvas.width, canvas.height);
+          const pdf = new jsPDF({orientation: 'portrait', unit: 'pt', format: 'letter'});
+          const margin = 36;
+          const pageWidth = pdf.internal.pageSize.getWidth();
+          const pageHeight = pdf.internal.pageSize.getHeight();
+          const scale = Math.min((pageWidth - margin * 2) / canvas.width, (pageHeight - margin * 2) / canvas.height);
+          const imageWidth = canvas.width * scale;
+          const imageHeight = canvas.height * scale;
+          pdf.addImage(imageData, 'PNG', (pageWidth - imageWidth) / 2, (pageHeight - imageHeight) / 2, imageWidth, imageHeight);
           pdf.save(`report-card-${firstName.toLowerCase().replace(/[^a-z0-9]+/g, '-')}.pdf`);
         } catch (error) { console.error(error); }
       });
