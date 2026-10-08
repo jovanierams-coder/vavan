@@ -1,0 +1,1315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Business Law & Taxation Reviewer — ECC12 · Kokorolls Edition</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500;1,9..144,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F4F1EA;
+  --paper:#FFFEFB;
+  --ink:#182A2A;
+  --ink-soft:#526263;
+  --ink-faint:#879494;
+  --line:#DCE3DE;
+  --law:#C6533D;
+  --law-soft:#F8E5DF;
+  --tax:#16766A;
+  --tax-soft:#DDF1EC;
+  --gold:#C48B2E;
+  --gold-soft:#FFF2D6;
+  --wrong:#A23B2E;
+  --wrong-soft:#F6E1DD;
+  --radius:12px;
+  --radius-sm:7px;
+  --shadow:0 1px 2px rgba(24,42,42,.05), 0 12px 28px rgba(24,42,42,.07);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{
+  font-family:'Inter',system-ui,sans-serif;
+  color:var(--ink);
+  background:
+    linear-gradient(rgba(255,255,255,.3) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(22,118,106,.035) 1px, transparent 1px),
+    var(--bg);
+  background-size:32px 32px;
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3,h4{font-family:'Fraunces',Georgia,serif;font-weight:600;color:var(--ink);}
+a{color:inherit;}
+button{font-family:inherit;}
+::selection{background:var(--gold-soft);}
+
+/* ===== Skip link / focus ===== */
+a:focus-visible, button:focus-visible, summary:focus-visible{
+  outline:2px solid var(--law); outline-offset:2px;
+}
+
+/* ===== Shell ===== */
+.app{max-width:1320px;margin:0 auto;min-height:100vh;display:flex;flex-direction:column;background:rgba(244,241,234,.82);}
+
+header.top{
+  padding:16px 28px 15px;
+  border-bottom:1px solid var(--line);
+  position:sticky; top:0; z-index:30;
+  background:rgba(255,254,251,.9);
+  box-shadow:0 5px 20px rgba(24,42,42,.06);
+  backdrop-filter:blur(14px);
+}
+.reading-progress{
+  position:fixed; top:0; left:0; z-index:40; width:0; height:3px;
+  background:linear-gradient(90deg, var(--law), var(--gold), var(--tax));
+  box-shadow:0 0 10px rgba(22,118,106,.35);
+  transition:width .12s ease-out;
+}
+.top-row{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;}
+.brand{display:flex;align-items:center;gap:12px;}
+.brand .mark{display:grid;place-items:center;width:42px;height:42px;font-size:1.35em;background:var(--ink);border-radius:12px;box-shadow:0 5px 12px rgba(24,42,42,.16);}
+.brand h1{font-size:1.28em;letter-spacing:-0.02em;line-height:1.15;}
+.brand .tag{font-size:.78em;color:var(--ink-soft);font-family:'Inter',sans-serif;}
+.brand .sub{display:block;font-size:.77em;color:var(--ink-soft);margin-top:4px;font-family:'Inter',sans-serif;}
+
+.modes{display:flex;gap:4px;background:#EDF2EF;border:1px solid var(--line);border-radius:12px;padding:4px;}
+.mode-btn{
+  border:none;background:transparent;color:var(--ink-soft);
+  padding:9px 16px;border-radius:8px;font-size:.84em;font-weight:700;cursor:pointer;
+  transition:background .2s ease, color .2s ease, transform .2s ease;
+}
+.mode-btn:hover{color:var(--ink);transform:translateY(-1px);}
+.mode-btn.active{background:var(--ink);color:var(--paper);box-shadow:0 4px 10px rgba(24,42,42,.16);}
+
+/* ===== Layout ===== */
+.wrap{display:flex;flex:1;min-height:0;}
+.menu-toggle{
+  display:none; width:100%; text-align:left; background:var(--paper); color:var(--ink);
+  border:none; border-bottom:1px solid var(--line); padding:12px 20px; font-weight:600; font-size:.95em; cursor:pointer;
+}
+.menu-toggle .chev{float:right;transition:transform .2s ease;}
+.menu-toggle.active .chev{transform:rotate(180deg);}
+
+nav.side{
+  width:268px; flex-shrink:0; padding:22px 12px 40px 0; overflow-y:auto;
+  position:sticky; top:86px; height:calc(100vh - 86px); align-self:flex-start;
+  border-right:1px solid var(--line);
+}
+nav.side .cat{padding:16px 20px 7px; font-size:.68em; letter-spacing:.13em; text-transform:uppercase; color:var(--ink-faint); font-weight:800;}
+nav.side ul{list-style:none;}
+nav.side .topic-link{
+  display:flex; align-items:center; gap:9px;
+  padding:10px 16px 10px 20px; text-decoration:none; color:var(--ink); font-weight:700; font-size:.88em;
+  border-left:3px solid transparent; border-radius:0 9px 9px 0; cursor:pointer;
+  transition:background .2s ease, color .2s ease, padding-left .2s ease;
+}
+nav.side .topic-link .dot{width:7px;height:7px;border-radius:50%;background:var(--line);flex-shrink:0;transition:background .2s ease, transform .2s ease;}
+nav.side .topic-link.visited .dot{background:var(--gold);}
+nav.side .topic-link:hover{background:rgba(255,254,251,.8);padding-left:24px;}
+nav.side .topic-link:hover .dot{transform:scale(1.25);}
+nav.side li[data-cat="law"] .topic-link.active{border-left-color:var(--law); background:var(--law-soft); color:var(--law);}
+nav.side li[data-cat="tax"] .topic-link.active{border-left-color:var(--tax); background:var(--tax-soft); color:var(--tax);}
+nav.side .sub{list-style:none;padding-left:38px;margin-bottom:8px;}
+nav.side .sub a{
+  display:block; padding:6px 8px; font-size:.78em; color:var(--ink-soft); text-decoration:none; cursor:pointer; border-radius:6px;
+  transition:background .2s ease, color .2s ease, box-shadow .2s ease, transform .2s ease;
+}
+nav.side .sub a:hover{color:var(--ink); background:var(--paper); transform:translateX(2px);}
+nav.side .sub a.active{color:var(--ink); background:var(--gold-soft); font-weight:600; box-shadow:inset 3px 0 var(--gold);}
+
+main{flex:1; padding:44px 64px 100px; min-width:0;}
+.section{display:none;}
+.section.active{display:block; animation:fade .32s ease;}
+@keyframes fade{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+
+.section-head{display:flex; align-items:center; gap:12px; margin-bottom:10px; padding-bottom:14px; border-bottom:1px solid var(--line);}
+.section-head h2{font-size:clamp(1.65rem, 3vw, 2.2rem); letter-spacing:-.025em; line-height:1.1;}
+.pill{
+  font-family:'Inter',sans-serif; font-size:.68em; font-weight:700; letter-spacing:.04em;
+  padding:5px 10px; border-radius:999px;
+}
+li[data-cat="law"] ~ * .pill,
+.pill.law{background:var(--law-soft); color:var(--law);}
+.pill.tax{background:var(--tax-soft); color:var(--tax);}
+.section-intro{color:var(--ink-soft); font-size:.98em; margin-bottom:34px; max-width:68ch;}
+
+.subsection{margin-bottom:46px; scroll-margin-top:106px;}
+.subsection h3{font-size:1.2em; margin-bottom:14px; color:var(--ink); letter-spacing:-.01em;}
+.subsection h3 .n{color:var(--ink-faint); font-weight:500; margin-right:4px;}
+p{margin-bottom:12px; font-size:.95em; max-width:72ch;}
+
+.box{border:1px solid var(--line); border-radius:var(--radius); padding:17px 19px; margin:16px 0; background:rgba(255,254,251,.86); font-size:.93em; box-shadow:var(--shadow);}
+.box.concept{border-left:4px solid var(--law);}
+.box.concept strong{color:var(--law);}
+.box.example{border-left:4px solid var(--gold); background:var(--gold-soft);}
+.box.example strong{color:#8A6414;}
+.box.key{border-left:4px solid var(--tax);}
+.box.key strong{color:var(--tax);}
+.box ul{margin:8px 0 0 18px;}
+.box li{margin:6px 0; line-height:1.55;}
+.box p:last-child{margin-bottom:0;}
+
+.for-kokorolls{
+  border:1px dashed #D5AE62; background:var(--gold-soft); border-radius:var(--radius);
+  padding:15px 18px; margin:16px 0; font-size:.9em; box-shadow:0 5px 14px rgba(196,139,46,.08);
+}
+.for-kokorolls .lbl{font-weight:700; color:#8A6414; font-family:'Fraunces',serif; font-size:.95em; display:block; margin-bottom:3px;}
+
+.tip{
+  background:var(--ink); color:var(--bg); border-radius:var(--radius);
+  padding:17px 19px; margin:20px 0; font-size:.9em; box-shadow:0 10px 24px rgba(24,42,42,.16);
+}
+.tip .lbl{font-family:'Fraunces',serif; font-weight:600; color:var(--gold); display:block; margin-bottom:4px;}
+
+table{width:100%; border-collapse:separate; border-spacing:0; margin:16px 0; font-size:.88em; background:var(--paper); border:1px solid var(--line); border-radius:var(--radius); overflow:hidden; box-shadow:var(--shadow);}
+th{background:var(--ink); color:var(--bg); text-align:left; padding:11px 12px; font-weight:700; font-size:.86em; letter-spacing:.02em;}
+td{padding:11px 12px; border-bottom:1px solid var(--line); vertical-align:top;}
+tbody tr:hover td, tr:hover td{background:#F8FAF7;}
+tr:last-child td{border-bottom:none;}
+
+details.disclosure{border:1px solid var(--line); border-radius:var(--radius); margin:16px 0; background:var(--paper); overflow:hidden; box-shadow:var(--shadow);}
+details.disclosure summary{
+  cursor:pointer; list-style:none; padding:15px 17px; font-weight:700; font-size:.92em;
+  display:flex; justify-content:space-between; align-items:center;
+}
+details.disclosure summary::-webkit-details-marker{display:none;}
+details.disclosure summary::after{content:'+'; font-size:1.2em; color:var(--ink-faint); font-weight:400;}
+details.disclosure[open] summary::after{content:'–';}
+details.disclosure .inner{padding:0 15px 15px;}
+
+footer.foot{border-top:1px solid var(--line); padding:24px 28px; text-align:center; color:var(--ink-faint); font-size:.78em; background:rgba(255,254,251,.55);}
+footer.foot p{max-width:none; font-size:1em;}
+.back-to-top{
+  position:fixed; right:24px; bottom:24px; z-index:25; width:44px; height:44px;
+  border:1px solid var(--line); border-radius:12px; background:var(--ink); color:var(--bg);
+  font-size:1.25rem; font-weight:700; cursor:pointer; opacity:0; pointer-events:none;
+  transform:translateY(10px); box-shadow:0 10px 24px rgba(24,42,42,.2);
+  transition:opacity .2s ease, transform .2s ease, background .2s ease;
+}
+.back-to-top.visible{opacity:1; pointer-events:auto; transform:translateY(0);}
+.back-to-top:hover{background:var(--tax);}
+
+/* ===== Flashcards ===== */
+#flash-view, #quiz-view{display:none; padding:44px 20px 100px; max-width:720px; margin:0 auto; width:100%;}
+#flash-view.active, #quiz-view.active{display:block;}
+
+.chips{display:flex; gap:7px; flex-wrap:wrap; margin-bottom:24px;}
+.chip{
+  border:1px solid var(--line); background:var(--paper); color:var(--ink-soft);
+  padding:8px 13px; border-radius:999px; font-size:.8em; font-weight:700; cursor:pointer;
+  transition:background .2s ease, color .2s ease, border-color .2s ease, transform .2s ease;
+}
+.chip:hover{transform:translateY(-1px); border-color:var(--ink-soft);}
+.chip.active{background:var(--ink); color:var(--bg); border-color:var(--ink); box-shadow:0 4px 10px rgba(24,42,42,.14);}
+
+.deck-meta{display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; color:var(--ink-soft); font-size:.85em;}
+
+.card-stage{perspective:1400px; margin-bottom:20px;}
+.flashcard{
+  position:relative; width:100%; min-height:280px; cursor:pointer;
+  transform-style:preserve-3d; transition:transform .5s cubic-bezier(.2,.8,.2,1);
+}
+.flashcard.flipped{transform:rotateY(180deg);}
+.face{
+  position:absolute; inset:0; backface-visibility:hidden;
+  border-radius:16px; border:1px solid var(--line); box-shadow:0 18px 40px rgba(24,42,42,.12);
+  display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center;
+  padding:28px 24px;
+}
+.face.front{background:linear-gradient(145deg, #FFFEFB, #F1F7F3);}
+.face.back{background:var(--ink); color:var(--bg); transform:rotateY(180deg);}
+.face .eyebrow{font-size:.72em; letter-spacing:.04em; color:var(--ink-faint); font-weight:700; margin-bottom:12px;}
+.face.back .eyebrow{color:var(--gold);}
+.face .term{font-family:'Fraunces',serif; font-size:1.3em; font-weight:600; line-height:1.3;}
+.face .def{font-size:.98em; line-height:1.55; max-width:44ch;}
+.face .hint{position:absolute; bottom:14px; font-size:.72em; color:var(--ink-faint);}
+.face.back .hint{color:#c9bfae;}
+
+.deck-controls{display:flex; gap:10px; justify-content:center;}
+.ctrl-btn{
+  border:1px solid var(--line); background:var(--paper); color:var(--ink);
+  padding:11px 18px; border-radius:9px; font-weight:700; font-size:.84em; cursor:pointer;
+  transition:transform .2s ease, box-shadow .2s ease, background .2s ease;
+}
+.ctrl-btn:hover:not(:disabled){transform:translateY(-2px); box-shadow:0 7px 16px rgba(24,42,42,.12);}
+.ctrl-btn.primary{background:var(--ink); color:var(--bg); border-color:var(--ink);}
+.ctrl-btn:disabled{opacity:.4; cursor:default;}
+
+/* ===== Quiz ===== */
+.quiz-score{display:flex; gap:16px; margin-bottom:18px; font-size:.86em; color:var(--ink-soft);}
+.quiz-score b{color:var(--ink); font-family:'Fraunces',serif; font-size:1.15em;}
+.q-card{background:var(--paper); border:1px solid var(--line); border-radius:16px; padding:26px; box-shadow:0 18px 40px rgba(24,42,42,.1);}
+.q-card .q-pill{display:inline-block; margin-bottom:10px;}
+.q-card .q-text{font-family:'Fraunces',serif; font-size:1.12em; font-weight:600; margin-bottom:16px; line-height:1.4;}
+.choice{
+  display:block; width:100%; text-align:left; padding:11px 14px; margin-bottom:8px;
+  border:1px solid var(--line); border-radius:var(--radius); background:var(--bg); cursor:pointer; font-size:.92em;
+  transition:background .2s ease, border-color .2s ease, transform .2s ease;
+}
+.choice:hover:not(:disabled){border-color:var(--tax); background:var(--tax-soft); transform:translateX(3px);}
+.choice.correct{background:var(--tax-soft); border-color:var(--tax); font-weight:600;}
+.choice.incorrect{background:var(--wrong-soft); border-color:var(--wrong);}
+.choice:disabled{cursor:default;}
+.explain{margin-top:14px; padding:12px 14px; background:var(--gold-soft); border-radius:var(--radius); font-size:.88em; display:none;}
+.explain.show{display:block;}
+.q-actions{display:flex; justify-content:flex-end; margin-top:16px;}
+.quiz-done{text-align:center; padding:40px 10px;}
+.quiz-done .big{font-family:'Fraunces',serif; font-size:2.4em; margin-bottom:6px;}
+
+@media(min-width:769px){
+  .menu-toggle{display:none!important;}
+  main{padding:46px 64px 110px;}
+}
+@media(max-width:768px){
+  header.top{padding:14px 16px 13px;}
+  .top-row{flex-wrap:wrap;}
+  .modes{width:100%; justify-content:center;}
+  .mode-btn{flex:1; padding:8px 9px;}
+  .wrap{flex-direction:column;}
+  .menu-toggle{display:block;}
+  nav.side{
+    width:100%; border-right:none; border-bottom:1px solid var(--line);
+    position:static; height:auto; max-height:0; padding:0; transition:max-height .25s ease;
+  }
+  nav.side.open{max-height:70vh; padding:10px 0;}
+  main{padding:28px 18px 76px;}
+  .brand h1{font-size:1.05em;}
+  .brand .sub{font-size:.7em;}
+  .section-head{align-items:flex-start; flex-wrap:wrap;}
+  .section-head h2{font-size:1.65rem;}
+  .section-intro{margin-bottom:28px;}
+  .subsection{margin-bottom:38px;}
+  .face{padding:22px 18px;}
+  .flashcard{min-height:250px;}
+  #flash-view, #quiz-view{padding:30px 16px 76px;}
+  .q-card{padding:20px;}
+  table{display:block; overflow-x:auto; white-space:normal;}
+  .back-to-top{right:16px; bottom:16px;}
+}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <header class="top">
+    <div class="top-row">
+      <div class="brand">
+        <span class="mark">🥐</span>
+        <div>
+          <h1>Business Law &amp; Taxation Reviewer</h1>
+          <span class="sub">ECC12 · Kokorolls Edition · figures current to 2026 BIR issuances</span>
+        </div>
+      </div>
+      <div class="modes">
+        <button class="mode-btn active" data-mode="study">Study</button>
+        <button class="mode-btn" data-mode="flash">Flashcards</button>
+        <button class="mode-btn" data-mode="quiz">Quiz</button>
+      </div>
+    </div>
+  </header>
+  <div class="reading-progress" id="readingProgress" aria-hidden="true"></div>
+
+  <!-- ===================== STUDY MODE ===================== -->
+  <div id="study-view" class="wrap">
+    <button class="menu-toggle" id="menuToggle" type="button" aria-expanded="false" aria-controls="navigation">Topics <span class="chev">▾</span></button>
+
+    <nav class="side" id="navigation">
+      <div class="cat">Business Law</div>
+      <ul>
+        <li data-cat="law"><a class="topic-link active" data-section="contracts" aria-current="page"><span class="dot"></span>📋 Contracts &amp; Obligations</a>
+          <ul class="sub">
+            <li><a class="active" data-target="contracts-definition" aria-current="location">Definition &amp; elements (OCAT)</a></li>
+            <li><a data-target="contracts-types">Types of contracts</a></li>
+            <li><a data-target="contracts-obligations">Obligations to give/do/not do</a></li>
+            <li><a data-target="contracts-breach">Breach &amp; remedies</a></li>
+          </ul>
+        </li>
+        <li data-cat="law"><a class="topic-link" data-section="agency"><span class="dot"></span>🤝 Agency</a>
+          <ul class="sub">
+            <li><a data-target="agency-definition">Principal &amp; agent</a></li>
+            <li><a data-target="agency-authority">Types of authority</a></li>
+            <li><a data-target="agency-duties">Agent's duties</a></li>
+            <li><a data-target="agency-liability">Principal's liability</a></li>
+          </ul>
+        </li>
+        <li data-cat="law"><a class="topic-link" data-section="corporations"><span class="dot"></span>🏢 Corporations</a>
+          <ul class="sub">
+            <li><a data-target="corp-definition">Definition &amp; traits</a></li>
+            <li><a data-target="corp-types">Types of corporations</a></li>
+            <li><a data-target="corp-structure">Corporate hierarchy</a></li>
+            <li><a data-target="corp-liability">Limited liability shield</a></li>
+          </ul>
+        </li>
+        <li data-cat="law"><a class="topic-link" data-section="partnerships"><span class="dot"></span>👥 Partnerships</a>
+          <ul class="sub">
+            <li><a data-target="partner-definition">Definition &amp; formation</a></li>
+            <li><a data-target="partner-types">GP, LP, joint venture</a></li>
+            <li><a data-target="partner-comparison">Partnership vs. corp</a></li>
+            <li><a data-target="partner-rights">Rights &amp; duties</a></li>
+          </ul>
+        </li>
+      </ul>
+
+      <div class="cat">Taxation</div>
+      <ul>
+        <li data-cat="tax"><a class="topic-link" data-section="income-tax"><span class="dot"></span>💰 Income Tax</a>
+          <ul class="sub">
+            <li><a data-target="tax-types">Types of income</a></li>
+            <li><a data-target="tax-deductions">Allowable deductions</a></li>
+            <li><a data-target="tax-rates">Individual &amp; corporate rates</a></li>
+            <li><a data-target="tax-filing">Filing requirements</a></li>
+          </ul>
+        </li>
+        <li data-cat="tax"><a class="topic-link" data-section="vat"><span class="dot"></span>🛍️ VAT &amp; Percentage Tax</a>
+          <ul class="sub">
+            <li><a data-target="vat-how">How VAT works</a></li>
+            <li><a data-target="vat-input-output">Input &amp; output VAT</a></li>
+            <li><a data-target="vat-exempt">VAT-able vs. exempt</a></li>
+            <li><a data-target="vat-percentage">Percentage tax &amp; the 8% option</a></li>
+            <li><a data-target="vat-registration">Registration &amp; filing</a></li>
+          </ul>
+        </li>
+        <li data-cat="tax"><a class="topic-link" data-section="excise"><span class="dot"></span>🚗 Excise Tax</a>
+          <ul class="sub">
+            <li><a data-target="excise-items">What gets taxed</a></li>
+            <li><a data-target="excise-rates">Categories &amp; rates</a></li>
+            <li><a data-target="excise-vs">Excise vs. VAT</a></li>
+            <li><a data-target="excise-admin">Administration</a></li>
+          </ul>
+        </li>
+        <li data-cat="tax"><a class="topic-link" data-section="business-taxes"><span class="dot"></span>📊 Other Business Taxes</a>
+          <ul class="sub">
+            <li><a data-target="btax-franchise">Local business tax</a></li>
+            <li><a data-target="btax-bmbe">BMBE exemption</a></li>
+            <li><a data-target="btax-property">Real property tax</a></li>
+            <li><a data-target="btax-stamp">Documentary stamp tax</a></li>
+            <li><a data-target="btax-withholding">Withholding &amp; capital gains</a></li>
+            <li><a data-target="btax-calendar">Tax calendar</a></li>
+          </ul>
+        </li>
+      </ul>
+    </nav>
+
+    <main id="mainContent">
+
+      <!-- CONTRACTS -->
+      <section id="contracts" class="section active">
+        <div class="section-head"><h2>📋 Contracts &amp; Obligations</h2><span class="pill law">Business Law</span></div>
+        <p class="section-intro">The legal backbone of every sale, supplier deal, and delivery arrangement Kokorolls makes — even the ones sealed with nothing but a Viber message.</p>
+
+        <div id="contracts-definition" class="subsection">
+          <h3><span class="n">01</span>Definition &amp; Elements (OCAT)</h3>
+          <div class="box concept">
+            <strong>Contract:</strong> an agreement between two or more parties that creates legal obligations. Philippine law requires four elements before it's binding: (1) offer and acceptance, (2) consideration, (3) intent to be legally bound, and (4) a lawful subject matter.
+          </div>
+          <div class="box key">
+            <strong>The OCAT rule</strong>
+            <ul>
+              <li><strong>Offer:</strong> one party proposes specific terms to another.</li>
+              <li><strong>Consideration:</strong> something of value changes hands — money, goods, or services.</li>
+              <li><strong>Acceptance:</strong> the other party agrees to those exact terms.</li>
+              <li><strong>Intent:</strong> both sides mean for legal consequences to follow.</li>
+            </ul>
+          </div>
+          <div class="for-kokorolls">
+            <span class="lbl">At Kokorolls</span>
+            You list cinnamon rolls at ₱100/piece (offer). A customer pays ₱100 (acceptance + consideration). Both of you expect ownership to transfer and the sale to be final (intent). All four boxes checked — valid contract, even though nothing was signed.
+          </div>
+        </div>
+
+        <div id="contracts-types" class="subsection">
+          <h3><span class="n">02</span>Types of Contracts</h3>
+          <table>
+            <tr><th>Type</th><th>Definition</th><th>Example</th></tr>
+            <tr><td><strong>Bilateral</strong></td><td>Both parties owe a performance</td><td>Sale of goods — you deliver rolls, buyer pays</td></tr>
+            <tr><td><strong>Unilateral</strong></td><td>Only one party is obligated</td><td>"₱500 reward if you find my missing delivery bag"</td></tr>
+            <tr><td><strong>Express</strong></td><td>Terms stated clearly, oral or written</td><td>A written agreement with your flour supplier</td></tr>
+            <tr><td><strong>Implied</strong></td><td>Terms understood from conduct</td><td>A walk-in customer picks up a box and pays at the counter</td></tr>
+          </table>
+        </div>
+
+        <div id="contracts-obligations" class="subsection">
+          <h3><span class="n">03</span>Obligations — What Each Party Must Do</h3>
+          <div class="box concept">
+            <strong>Obligation:</strong> a legal duty one party owes another under a contract. There are three kinds.
+            <ul>
+              <li><strong>To give:</strong> transfer ownership of something — you hand over the box of rolls.</li>
+              <li><strong>To do:</strong> perform an action or service — a courier completes a delivery route.</li>
+              <li><strong>Not to do:</strong> refrain from an action — a non-compete clause barring an ex-employee from opening a rival roll stall nearby.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div id="contracts-breach" class="subsection">
+          <h3><span class="n">04</span>Breach of Contract &amp; Remedies</h3>
+          <details class="disclosure">
+            <summary>Breach &amp; the four remedies</summary>
+            <div class="inner">
+              <p><strong>Breach:</strong> one party fails to fulfill its obligation.</p>
+              <table>
+                <tr><th>Remedy</th><th>Meaning</th><th>When used</th></tr>
+                <tr><td><strong>Damages</strong></td><td>Monetary compensation for losses</td><td>Non-breaching party needs to be paid back</td></tr>
+                <tr><td><strong>Specific performance</strong></td><td>Court orders the breaching party to actually perform</td><td>Money alone can't fix it — a one-of-a-kind item or property</td></tr>
+                <tr><td><strong>Rescission</strong></td><td>Contract is canceled, parties restored to original position</td><td>Continuing would be unfair to one side</td></tr>
+                <tr><td><strong>Reformation</strong></td><td>Court rewrites the contract's wording</td><td>Both sides made the same honest mistake in drafting</td></tr>
+              </table>
+            </div>
+          </details>
+          <div class="tip"><span class="lbl">Memory tip</span>Remember <strong>OCAT</strong> — Offer, Consideration, Acceptance, Intent. Drop any one of the four and there's no valid contract at all, no matter how much everyone meant to be bound.</div>
+        </div>
+      </section>
+
+      <!-- AGENCY -->
+      <section id="agency" class="section">
+        <div class="section-head"><h2>🤝 Agency</h2><span class="pill law">Business Law</span></div>
+        <p class="section-intro">Whoever collects payments, negotiates with suppliers, or manages a bazaar stall on your behalf is legally speaking for you — for better or worse.</p>
+
+        <div id="agency-definition" class="subsection">
+          <h3><span class="n">01</span>Principal &amp; Agent Relationship</h3>
+          <div class="box concept"><strong>Agency:</strong> a relationship where one person (the agent) acts on behalf of another (the principal), with the principal's consent, in dealings with third parties.</div>
+          <div class="for-kokorolls"><span class="lbl">At Kokorolls</span>You hire someone to collect payment from bazaar customers on your behalf. That person is your agent; you're the principal. The customers are third parties dealing with your agent — but legally, <em>you</em> are the one bound by what the agent does.</div>
+        </div>
+
+        <div id="agency-authority" class="subsection">
+          <h3><span class="n">02</span>Types of Authority</h3>
+          <div class="box key">
+            <strong>Four ways authority can arise</strong>
+            <ul>
+              <li><strong>Express:</strong> you say it directly — "you're authorized to collect payments," written or spoken.</li>
+              <li><strong>Implied:</strong> reasonably necessary to carry out what was expressly authorized — collecting payment implies the power to issue a receipt.</li>
+              <li><strong>Apparent (ostensible):</strong> looks like authority exists because of how you've represented the agent to others, even if you never actually granted it. You're still bound.</li>
+              <li><strong>Ratification:</strong> you later approve of an unauthorized act, making it valid retroactively.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div id="agency-duties" class="subsection">
+          <h3><span class="n">03</span>Agent's Duties to Principal</h3>
+          <div class="box concept">
+            <strong>An agent must:</strong>
+            <ul>
+              <li><strong>Follow instructions</strong> that are lawful.</li>
+              <li><strong>Act with care and diligence</strong> — reasonable skill and attention.</li>
+              <li><strong>Act in good faith</strong> — honesty and fairness throughout.</li>
+              <li><strong>Account for money and property</strong> received, and remit it promptly.</li>
+              <li><strong>Avoid conflicts of interest</strong> — never profit at the principal's expense.</li>
+              <li><strong>Keep information confidential</strong> — your recipe ratios stay yours.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div id="agency-liability" class="subsection">
+          <h3><span class="n">04</span>Principal's Liability for Agent's Acts</h3>
+          <div class="box example"><strong>Key rule:</strong> a principal is liable for acts the agent performs within the scope of the agent's authority. If your agent signs a supplier contract on your behalf and within their authority, <em>you</em> are bound — the third party can hold you responsible even though the agent physically signed.</div>
+          <div class="tip"><span class="lbl">Memory tip</span>Authority in = liability in. The more authority you hand your agent, the more you're on the hook for what they do in your name.</div>
+        </div>
+      </section>
+
+      <!-- CORPORATIONS -->
+      <section id="corporations" class="section">
+        <div class="section-head"><h2>🏢 Corporations</h2><span class="pill law">Business Law</span></div>
+        <p class="section-intro">If Kokorolls ever incorporates, the business becomes its own legal person — with its own risks separated from yours.</p>
+
+        <div id="corp-definition" class="subsection">
+          <h3><span class="n">01</span>Definition &amp; Characteristics</h3>
+          <div class="box concept"><strong>Corporation:</strong> a legal entity created by law, separate and distinct from its owners (shareholders). It can own property, enter contracts, and sue or be sued — like a person of its own.</div>
+          <div class="for-kokorolls"><span class="lbl">At Kokorolls</span>If "Kokorolls by Vanie" incorporates, the business becomes its own legal person, separate from you. It can own equipment, sign supplier contracts, and answer for its own debts. Your personal house and car aren't automatically on the line if the business owes money.</div>
+          <div class="box key">
+            <strong>Key characteristics</strong>
+            <ul>
+              <li><strong>Separate legal personality</strong> — the corporation exists independently of its owners.</li>
+              <li><strong>Limited liability</strong> — owners risk only what they invested.</li>
+              <li><strong>Perpetual succession</strong> — it survives changes in ownership.</li>
+              <li><strong>Transferable shares</strong> — ownership can be bought and sold.</li>
+              <li><strong>Centralized management</strong> — run by a Board of Directors, not each owner individually.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div id="corp-types" class="subsection">
+          <h3><span class="n">02</span>Types of Corporations in the Philippines</h3>
+          <table>
+            <tr><th>Type</th><th>Characteristics</th><th>Best for</th></tr>
+            <tr><td><strong>Stock corporation</strong></td><td>Ownership divided into shares; unlimited stockholders; profits distributed as dividends</td><td>Businesses seeking investor funding or planning to scale</td></tr>
+            <tr><td><strong>Non-stock corporation</strong></td><td>No shares; members have equal rights; charitable, educational, religious, or civic purpose</td><td>NGOs, schools, cooperatives, associations</td></tr>
+            <tr><td><strong>One Person Corporation (OPC)</strong></td><td>A single stockholder who is also director and president; still enjoys limited liability</td><td>Solo founders who want incorporation without needing co-owners</td></tr>
+          </table>
+        </div>
+
+        <div id="corp-structure" class="subsection">
+          <h3><span class="n">03</span>Corporate Structure &amp; Hierarchy</h3>
+          <details class="disclosure">
+            <summary>The chain of command</summary>
+            <div class="inner">
+              <p><strong>Shareholders → Board of Directors → Officers → Employees</strong></p>
+              <ul style="margin-left:18px;">
+                <li><strong>Shareholders:</strong> own shares, vote on major decisions, elect the Board, receive dividends.</li>
+                <li><strong>Board of Directors:</strong> sets policy, approves major decisions, hires and supervises the President/CEO.</li>
+                <li><strong>President/CEO:</strong> runs day-to-day operations, implements Board decisions.</li>
+                <li><strong>Officers &amp; employees:</strong> execute operations under the CEO's direction.</li>
+              </ul>
+            </div>
+          </details>
+        </div>
+
+        <div id="corp-liability" class="subsection">
+          <h3><span class="n">04</span>Limited Liability Shield — The Key Benefit</h3>
+          <div class="box concept"><strong>Key benefit:</strong> shareholders' personal assets are shielded from the corporation's debts. If the corporation owes ₱1,000,000 to creditors, creditors can go after corporate assets only — not your house, car, or personal bank account.</div>
+          <div class="for-kokorolls"><span class="lbl">At Kokorolls</span>You invest ₱100,000 to incorporate. Two years later the business owes ₱500,000 to suppliers. Creditors can seize business assets and equipment, but not your personal savings. Your maximum loss is the ₱100,000 you put in.</div>
+          <div class="tip"><span class="lbl">Memory tip</span>"Separate entity" = separate liability. A corporation loses your investment if it fails — but never your house.</div>
+        </div>
+      </section>
+
+      <!-- PARTNERSHIPS -->
+      <section id="partnerships" class="section">
+        <div class="section-head"><h2>👥 Partnerships</h2><span class="pill law">Business Law</span></div>
+        <p class="section-intro">The structure to know before bringing on a co-founder, a silent investor, or a one-off bazaar collaborator.</p>
+
+        <div id="partner-definition" class="subsection">
+          <h3><span class="n">01</span>Definition &amp; Formation</h3>
+          <div class="box concept"><strong>Partnership:</strong> a voluntary agreement between two or more people to combine resources — money, skills, property — and share the profits or losses of a common business.</div>
+          <div class="for-kokorolls"><span class="lbl">At Kokorolls</span>You and a friend agree to start a catering line together. You contribute recipes and baking know-how; your friend contributes ₱50,000 capital. You agree to split profit and loss 50-50. That's a partnership — you're both partners with equal rights unless you agreed otherwise.</div>
+        </div>
+
+        <div id="partner-types" class="subsection">
+          <h3><span class="n">02</span>Types of Partnerships</h3>
+          <table>
+            <tr><th>Type</th><th>Definition</th><th>Liability</th></tr>
+            <tr><td><strong>General (GP)</strong></td><td>All partners manage and share profit/loss</td><td>Unlimited — personal assets are exposed</td></tr>
+            <tr><td><strong>Limited (LP)</strong></td><td>Mix of general partners (manage) and limited partners (invest only)</td><td>Limited partners: liability capped at investment. General partners: unlimited</td></tr>
+            <tr><td><strong>Joint venture</strong></td><td>Temporary partnership for one specific project, dissolves after</td><td>Depends on the agreement</td></tr>
+          </table>
+        </div>
+
+        <div id="partner-comparison" class="subsection">
+          <h3><span class="n">03</span>Partnership vs. Corporation</h3>
+          <table>
+            <tr><th>Aspect</th><th>Partnership</th><th>Corporation</th></tr>
+            <tr><td><strong>Legal entity</strong></td><td>Generally not separate from partners</td><td>Separate from shareholders</td></tr>
+            <tr><td><strong>Liability</strong></td><td>Partners personally liable, unlimited</td><td>Limited to investment</td></tr>
+            <tr><td><strong>Management</strong></td><td>All partners, usually</td><td>Board of Directors</td></tr>
+            <tr><td><strong>Continuity</strong></td><td>Dissolves if a partner leaves or dies</td><td>Continues regardless of ownership changes</td></tr>
+            <tr><td><strong>Taxation</strong></td><td>Pass-through — partners taxed on their share</td><td>Taxed at the entity level, then again on dividends</td></tr>
+          </table>
+        </div>
+
+        <div id="partner-rights" class="subsection">
+          <h3><span class="n">04</span>Rights &amp; Duties of Partners</h3>
+          <div class="box key">
+            <strong>Rights</strong>
+            <ul>
+              <li>Share in profits per the agreement (or equally, if silent).</li>
+              <li>Participate in management decisions.</li>
+              <li>Inspect the partnership's books and records.</li>
+              <li>Get back their capital contribution on dissolution.</li>
+            </ul>
+          </div>
+          <div class="box concept">
+            <strong>Duties</strong>
+            <ul>
+              <li>Act in good faith toward co-partners.</li>
+              <li>Contribute the agreed capital, skills, or property.</li>
+              <li>Share losses proportionally, unless agreed otherwise.</li>
+              <li>Not compete with the partnership for personal gain.</li>
+              <li>Not use partnership property for personal purposes.</li>
+            </ul>
+          </div>
+          <div class="tip"><span class="lbl">Memory tip</span>Unlimited liability = personal risk. In a partnership, a ₱1M business debt can reach your personal assets. In a corporation, you cap your loss at what you invested.</div>
+        </div>
+      </section>
+
+      <!-- INCOME TAX -->
+      <section id="income-tax" class="section">
+        <div class="section-head"><h2>💰 Income Tax</h2><span class="pill tax">Taxation</span></div>
+        <p class="section-intro">Collected by the Bureau of Internal Revenue (BIR) on what individuals and corporations actually earn — not on everything that passes through the register.</p>
+
+        <div id="tax-types" class="subsection">
+          <h3><span class="n">01</span>Types of Income</h3>
+          <table>
+            <tr><th>Income type</th><th>Definition</th><th>Example</th></tr>
+            <tr><td><strong>Compensation</strong></td><td>Salary, wages, bonuses from employment</td><td>A day-job salary of ₱25,000/month</td></tr>
+            <tr><td><strong>Business income</strong></td><td>Profit from self-employment or business operations</td><td>Kokorolls revenue ₱100k minus expenses ₱50k = ₱50k taxable</td></tr>
+            <tr><td><strong>Capital gains</strong></td><td>Profit from selling an asset or property</td><td>Buy an asset at ₱100k, sell at ₱150k = ₱50k gain</td></tr>
+            <tr><td><strong>Passive income</strong></td><td>Income from investments — dividends, interest, rent</td><td>A payout from an ETF holding</td></tr>
+            <tr><td><strong>Other income</strong></td><td>Prizes, winnings, miscellaneous gains</td><td>Contest prize money tied to your business</td></tr>
+          </table>
+        </div>
+
+        <div id="tax-deductions" class="subsection">
+          <h3><span class="n">02</span>Allowable Deductions</h3>
+          <div class="box concept">
+            <strong>Basic formula:</strong> Gross Income − Allowable Deductions = Taxable Income
+            <p style="margin-top:12px;"><strong>Common deductions for a business owner:</strong></p>
+            <ul>
+              <li>Cost of goods sold — flour, sugar, butter, cream cheese, cinnamon, packaging.</li>
+              <li>Business supplies — labels, boxes, wrappers, utensils.</li>
+              <li>Rent and utilities — kitchen space, electricity, water, gas.</li>
+              <li>Depreciation of equipment — ovens, mixers.</li>
+              <li>Business insurance.</li>
+              <li>Wages paid to helpers or employees.</li>
+              <li>Professional fees — accountant, legal consultation.</li>
+              <li>Marketing and advertising — social media ads, promo materials.</li>
+            </ul>
+          </div>
+          <div class="for-kokorolls">
+            <span class="lbl">Kokorolls monthly example</span>
+            Total revenue: ₱100,000<br>
+            Less cost of goods sold: −₱40,000<br>
+            Less utilities, packaging, delivery: −₱10,000<br>
+            Less equipment depreciation: −₱2,000<br>
+            <strong>Taxable income: ₱48,000</strong> — you're taxed on ₱48,000, not the full ₱100,000.
+          </div>
+        </div>
+
+        <div id="tax-rates" class="subsection">
+          <h3><span class="n">03</span>Tax Rates — Individual &amp; Corporate</h3>
+          <table>
+            <tr><th>Taxable income (annual)</th><th>Tax due</th></tr>
+            <tr><td>₱0 – ₱250,000</td><td>0% — exempt</td></tr>
+            <tr><td>₱250,001 – ₱400,000</td><td>15% of the excess over ₱250,000</td></tr>
+            <tr><td>₱400,001 – ₱800,000</td><td>₱22,500 + 20% of the excess over ₱400,000</td></tr>
+            <tr><td>₱800,001 – ₱2,000,000</td><td>₱102,500 + 25% of the excess over ₱800,000</td></tr>
+            <tr><td>₱2,000,001 – ₱8,000,000</td><td>₱402,500 + 30% of the excess over ₱2,000,000</td></tr>
+            <tr><td>Over ₱8,000,000</td><td>₱2,202,500 + 35% of the excess over ₱8,000,000</td></tr>
+          </table>
+          <div class="box example">
+            <strong>The 8% flat-tax option:</strong> self-employed individuals and professionals earning ₱3,000,000 or less a year can elect an 8% flat tax on gross sales (in excess of ₱250,000) <em>instead of</em> the graduated table above <em>and</em> instead of percentage tax. One number, no need to track itemized deductions — but you give up deducting your actual costs, so it only wins if your real expenses are modest relative to revenue.
+          </div>
+          <div class="box key" style="margin-top:16px;">
+            <strong>Corporate income tax</strong>
+            <ul>
+              <li><strong>25%</strong> standard rate on net taxable income.</li>
+              <li><strong>20%</strong> preferential rate for domestic corporations with net taxable income ≤ ₱5,000,000 and total assets ≤ ₱100,000,000 (excluding the land the business sits on) — most small and micro corporations qualify.</li>
+              <li><strong>Minimum Corporate Income Tax (MCIT) of 2%</strong> of gross income applies from a corporation's 4th year of operation onward, whenever it would otherwise owe less than that.</li>
+            </ul>
+          </div>
+          <div class="for-kokorolls"><span class="lbl">At Kokorolls</span>If Kokorolls incorporates and taxable income is ₱48,000/month (₱576,000/year), it falls well under the ₱5M threshold, so the <strong>20% MSME rate</strong> applies: ₱576,000 × 20% = ₱115,200/year, not the standard 25%.</div>
+        </div>
+
+        <div id="tax-filing" class="subsection">
+          <h3><span class="n">04</span>Filing Requirements &amp; Deadlines</h3>
+          <details class="disclosure">
+            <summary>Filing deadlines &amp; procedures</summary>
+            <div class="inner">
+              <p><strong>Individuals (self-employed / business owners):</strong></p>
+              <ul style="margin-left:18px;">
+                <li>Annual Income Tax Return (ITR): due April 15 of the following year.</li>
+                <li>Keep receipts, invoices, and business records for at least 3 years.</li>
+                <li>Quarterly income tax returns if business income is significant.</li>
+              </ul>
+              <p style="margin-top:12px;"><strong>Corporations:</strong></p>
+              <ul style="margin-left:18px;">
+                <li>Annual ITR: within 15 days from the statutory deadline set for the corporate return following fiscal year-end (typically the 15th day of the 4th month after FYE).</li>
+                <li>Maintain a balance sheet, profit &amp; loss statement, and cash-flow records.</li>
+                <li>Quarterly returns if gross receipts are substantial.</li>
+              </ul>
+            </div>
+          </details>
+          <div class="tip"><span class="lbl">Memory tip</span>Gross ≠ taxable income. You're taxed on profit after legitimate deductions, not on total revenue — good records are what makes that difference count.</div>
+        </div>
+      </section>
+
+      <!-- VAT -->
+      <section id="vat" class="section">
+        <div class="section-head"><h2>🛍️ VAT &amp; Percentage Tax</h2><span class="pill tax">Taxation</span></div>
+        <p class="section-intro">Two different consumption taxes, and which one applies depends almost entirely on your annual gross sales — this is the section that decides Kokorolls's actual tax treatment today.</p>
+
+        <div id="vat-how" class="subsection">
+          <h3><span class="n">01</span>How VAT Works</h3>
+          <div class="box concept"><strong>VAT (12%):</strong> a consumption tax applied at each stage of production and sale. Businesses collect it from customers and remit the "value added" portion to government; the final consumer ultimately bears the cost.</div>
+          <div class="for-kokorolls">
+            <span class="lbl">Full VAT flow — flour supplier → baker → customer</span>
+            <strong>Stage 1 — supplier sells flour to you:</strong> ₱1,000 + ₱120 VAT = you pay ₱1,120; supplier remits ₱120.<br><br>
+            <strong>Stage 2 — you sell rolls to a customer:</strong> ₱5,000 + ₱600 VAT = customer pays ₱5,600; you collect ₱600.<br><br>
+            <strong>Stage 3 — your remittance:</strong> Output VAT ₱600 − Input VAT ₱120 = <strong>₱480 remitted to BIR.</strong> You never keep the ₱600 — it's a pass-through, and the ₱480 you owe is the tax on the value <em>you</em> added.
+          </div>
+        </div>
+
+        <div id="vat-input-output" class="subsection">
+          <h3><span class="n">02</span>Input &amp; Output VAT</h3>
+          <div class="box concept">
+            <strong>Input VAT:</strong> VAT you paid on business purchases — creditable against what you owe.<br><br>
+            <strong>Output VAT:</strong> VAT you collected from customers — this is what you must remit.<br><br>
+            <strong>Net VAT payable = Output VAT − Input VAT.</strong> If Input exceeds Output, you can carry the excess forward or claim a refund.
+          </div>
+        </div>
+
+        <div id="vat-exempt" class="subsection">
+          <h3><span class="n">03</span>VAT-Able vs. VAT-Exempt Transactions</h3>
+          <table>
+            <tr><th>VAT-able (12%)</th><th>VAT-exempt</th></tr>
+            <tr><td>Sale of goods and services generally</td><td>Sale of raw, unprocessed foodstuffs (rice, fish, vegetables)</td></tr>
+            <tr><td>Rental of property or equipment</td><td>Agricultural and aquaculture inputs and services</td></tr>
+            <tr><td>Professional services</td><td>Educational services</td></tr>
+            <tr><td>Transportation services</td><td>Medical and health services</td></tr>
+            <tr><td>Restaurant and cooked-food sales</td><td>Bank services, insurance premiums</td></tr>
+          </table>
+          <div class="box example"><strong>For a bakery:</strong> baked goods are cooked, processed food — not raw foodstuffs — so they're VAT-able in principle. Whether you actually charge VAT depends on whether you're VAT-registered, which the next section covers.</div>
+        </div>
+
+        <div id="vat-percentage" class="subsection">
+          <h3><span class="n">04</span>Percentage Tax &amp; the 8% Option — the Realistic Answer for Small Businesses</h3>
+          <div class="box key">
+            <strong>The threshold that decides everything:</strong> under the TRAIN Law, VAT registration is <em>mandatory</em> only once annual gross sales or receipts exceed <strong>₱3,000,000</strong> in any 12-month period. Below that, you're a non-VAT taxpayer by default.
+          </div>
+          <div class="box concept">
+            Non-VAT businesses instead pay one of two things:
+            <ul>
+              <li><strong>Percentage tax (3%)</strong> on gross sales/receipts under Section 116 of the Tax Code — a single flat rate, no input/output tracking.</li>
+              <li><strong>The 8% flat income tax option</strong> (see Income Tax) — if you elect it, it <em>replaces both</em> the graduated income tax table <em>and</em> percentage tax. You can't owe both.</li>
+            </ul>
+            You may also voluntarily register for VAT below the ₱3M threshold — useful if your buyers are VAT-registered companies wanting to claim input VAT from you — but doing so locks you into the VAT system for 3 years.
+          </div>
+          <div class="for-kokorolls"><span class="lbl">At Kokorolls</span>A home-based bakery doing bazaar and pre-order sales almost certainly earns well under ₱3M a year. That means Kokorolls is <strong>not required to register for VAT or charge 12% VAT on cinnamon rolls at all</strong> — the real obligation is either the 3% percentage tax or the 8% flat option, whichever nets out lower. This is the single most exam-relevant, business-relevant fact in this whole section — don't let the VAT walkthrough above make you think VAT is automatically Kokorolls's problem.</div>
+        </div>
+
+        <div id="vat-registration" class="subsection">
+          <h3><span class="n">05</span>VAT Registration &amp; Filing</h3>
+          <details class="disclosure">
+            <summary>Registration requirements &amp; filing schedule</summary>
+            <div class="inner">
+              <p><strong>Who must register:</strong></p>
+              <ul style="margin-left:18px;">
+                <li>Gross sales/receipts exceeding ₱3,000,000 in any 12-month period.</li>
+                <li>Importers, regardless of sales volume.</li>
+                <li>Providers of international/export services above the same threshold.</li>
+              </ul>
+              <p style="margin-top:12px;"><strong>Process:</strong></p>
+              <ul style="margin-left:18px;">
+                <li>Register with the BIR and obtain a TIN, if you don't already have one.</li>
+                <li>Get your VAT Certificate of Registration.</li>
+                <li>File VAT returns — the current framework centers on quarterly filing, following the Ease of Paying Taxes Act's simplification of the old separate monthly and quarterly system.</li>
+              </ul>
+            </div>
+          </details>
+          <div class="tip"><span class="lbl">Memory tip</span>VAT at every stage, but nobody keeps it — the tax flows upward through the supply chain to government, and only the final consumer truly bears the cost.</div>
+        </div>
+      </section>
+
+      <!-- EXCISE -->
+      <section id="excise" class="section">
+        <div class="section-head"><h2>🚗 Excise Tax</h2><span class="pill tax">Taxation</span></div>
+        <p class="section-intro">A selective tax, not a general one — it targets specific goods rather than sitting on top of almost everything the way VAT does.</p>
+
+        <div id="excise-items" class="subsection">
+          <h3><span class="n">01</span>What Gets Taxed</h3>
+          <div class="box concept"><strong>Excise tax:</strong> levied on specific goods considered luxury, non-essential, or harmful. Unlike VAT, it applies only to certain products, and it serves two purposes at once — revenue, and discouraging consumption.</div>
+        </div>
+
+        <div id="excise-rates" class="subsection">
+          <h3><span class="n">02</span>Excise Tax Categories &amp; Rates</h3>
+          <table>
+            <tr><th>Category</th><th>Rate</th><th>Purpose</th></tr>
+            <tr><td><strong>Cigarettes/tobacco</strong></td><td>Specific peso rate per pack, adjusted annually</td><td>Revenue + public health</td></tr>
+            <tr><td><strong>Alcoholic beverages</strong></td><td>Varies by type and alcohol content</td><td>Revenue + reduce excessive use</td></tr>
+            <tr><td><strong>Petroleum products</strong></td><td>Peso-per-liter, varies by fuel type</td><td>Revenue + environmental impact</td></tr>
+            <tr><td><strong>Sugar-sweetened beverages</strong></td><td>Per-liter rate, higher for purely sugar-sweetened drinks</td><td>Public health — anti-obesity, diabetes prevention</td></tr>
+            <tr><td><strong>High-end automobiles</strong></td><td>Progressive, based on price/engine capacity</td><td>Revenue, luxury tax</td></tr>
+          </table>
+          <p style="font-size:.85em;color:var(--ink-faint);">Exact peso rates shift with annual indexation and new revenue regulations — treat the categories and logic as exam-stable, but verify current peso figures against the latest BIR issuance before quoting a number.</p>
+        </div>
+
+        <div id="excise-vs" class="subsection">
+          <h3><span class="n">03</span>Excise Tax vs. VAT</h3>
+          <table>
+            <tr><th>Aspect</th><th>Excise tax</th><th>VAT</th></tr>
+            <tr><td><strong>Applies to</strong></td><td>Specific goods only</td><td>Almost all goods and services</td></tr>
+            <tr><td><strong>Purpose</strong></td><td>Revenue + regulation of harmful goods</td><td>General revenue</td></tr>
+            <tr><td><strong>Rate</strong></td><td>Often very high on sin goods</td><td>Uniform 12%</td></tr>
+            <tr><td><strong>Base</strong></td><td>Usually manufacturer/import price</td><td>Each transaction value along the chain</td></tr>
+            <tr><td><strong>Can they overlap?</strong></td><td colspan="2">Yes — a taxed item like cigarettes carries excise tax <em>and</em> VAT on top</td></tr>
+          </table>
+        </div>
+
+        <div id="excise-admin" class="subsection">
+          <h3><span class="n">04</span>Administration</h3>
+          <div class="box concept">
+            <ul>
+              <li><strong>Administered by:</strong> the Bureau of Internal Revenue.</li>
+              <li><strong>Who pays:</strong> manufacturers and importers compute and remit at the point of manufacture or import.</li>
+              <li><strong>Separate from VAT:</strong> both can apply to the same product.</li>
+              <li><strong>Rates change:</strong> via legislation, especially for fuel and "sin" products.</li>
+            </ul>
+          </div>
+          <div class="box example"><strong>Illustration:</strong> a ₱100 pack of cigarettes might carry ~40% excise tax (₱40) remitted by the manufacturer, who nets ₱60. The retailer then sells at market price, and the consumer ultimately pays it all.</div>
+          <div class="tip"><span class="lbl">Memory tip</span>Excise = selective. VAT applies to nearly everything; excise only to sin goods and luxuries, at rates steep enough to actually discourage use.</div>
+        </div>
+      </section>
+
+      <!-- OTHER BUSINESS TAXES -->
+      <section id="business-taxes" class="section">
+        <div class="section-head"><h2>📊 Other Business Taxes</h2><span class="pill tax">Taxation</span></div>
+        <p class="section-intro">The smaller, easy-to-forget taxes and exemptions that round out a small business's compliance picture.</p>
+
+        <div id="btax-franchise" class="subsection">
+          <h3><span class="n">01</span>Local Business Tax</h3>
+          <div class="box concept">
+            <strong>What:</strong> an annual tax imposed by the city or municipality on the privilege of doing business there, under the Local Government Code — separate from national BIR taxes.
+            <br><br><strong>Who pays:</strong> every business operating within the locality, whether profitable or not.
+            <br><br><strong>How it's computed:</strong> local government units set their own schedule of rates based on gross receipts or capital, within caps set by the Local Government Code, so the exact amount varies by city or municipality.
+          </div>
+          <div class="for-kokorolls"><span class="lbl">At Kokorolls</span>Whatever city or municipality your kitchen operates from will have its own barangay clearance and business permit fees, renewed annually — budget for these alongside your BIR obligations, since they're a separate government layer entirely.</div>
+        </div>
+
+        <div id="btax-bmbe" class="subsection">
+          <h3><span class="n">02</span>BMBE Exemption — Worth Checking For a Business Like Kokorolls</h3>
+          <div class="box key">
+            <strong>Barangay Micro Business Enterprises (BMBE) Act, RA 9178:</strong> a business with total assets of ₱3,000,000 or less (excluding the land it sits on) can register as a BMBE with the local government. Registered BMBEs are <strong>exempt from income tax</strong> on income from the business's operations, and may also get simplified local tax treatment and easier access to credit and technical assistance.
+          </div>
+          <div class="for-kokorolls"><span class="lbl">At Kokorolls</span>A home-based bakery with modest equipment (ovens, mixers) almost certainly stays well under the ₱3M asset ceiling. Registering as a BMBE — a one-time application at the city or municipal treasurer's office — could mean owing <em>no income tax</em> on Kokorolls' profits at all, on top of whatever percentage tax or 8% flat option applies. This is worth an actual conversation with an accountant, not just an exam fact.</div>
+        </div>
+
+        <div id="btax-property" class="subsection">
+          <h3><span class="n">03</span>Real Property Tax</h3>
+          <div class="box concept">
+            <strong>Assessed value:</strong> based on property classification, location, and market value set by the local assessor.<br><br>
+            <strong>Rate:</strong> typically 0.5%–2% of assessed value, varying by municipality and property class.
+          </div>
+          <div class="box example"><strong>Scenario:</strong> a kitchen/shop assessed at ₱500,000 with a 1% local rate means ₱5,000/year in real property tax.</div>
+        </div>
+
+        <div id="btax-stamp" class="subsection">
+          <h3><span class="n">04</span>Documentary Stamp Tax</h3>
+          <div class="box concept">
+            <strong>What:</strong> a tax on documents and instruments — contracts, deeds, leases, bills of lading — executed in the Philippines.<br><br>
+            <strong>Rate:</strong> generally ₱1.50 per ₱200 of the document's value (or fraction thereof), with different rates for specific document types.<br><br>
+            <strong>Paid by:</strong> the person executing or receiving the document.
+          </div>
+          <div class="box example"><strong>Example:</strong> signing a ₱100,000 supplier contract triggers documentary stamp tax computed on that amount.</div>
+        </div>
+
+        <div id="btax-withholding" class="subsection">
+          <h3><span class="n">05</span>Withholding Taxes &amp; Capital Gains Tax</h3>
+          <div class="box concept">
+            <strong>Withholding tax:</strong> tax the payor deducts <em>before</em> paying the payee, then remits directly to the BIR.
+            <ul>
+              <li><strong>On compensation:</strong> employer withholds a graduated amount based on salary bracket.</li>
+              <li><strong>On contractor payments:</strong> businesses commonly withhold around 5% when paying independent contractors or suppliers.</li>
+              <li><strong>On payments to non-residents:</strong> royalties, management fees, rentals to foreign persons.</li>
+              <li><strong>Final withholding tax:</strong> the withheld amount is the full and final tax — nothing more is due on that income.</li>
+            </ul>
+          </div>
+          <div class="for-kokorolls"><span class="lbl">At Kokorolls</span>You hire a freelance designer for ₱10,000 to design labels. You withhold 5% (₱500), pay the designer ₱9,500, and remit the ₱500 to BIR.</div>
+          <div class="box example" style="border-left-color:var(--gold); background:var(--gold-soft);">
+            <strong>Capital gains tax:</strong> on profit from selling capital assets.
+            <ul>
+              <li><strong>Stocks sold on the exchange:</strong> 0.5% of gross selling price.</li>
+              <li><strong>Real property:</strong> 6% of gross selling price (or fair market value, if higher).</li>
+              <li><strong>Other capital assets:</strong> generally added to ordinary taxable income and taxed at the regular graduated rates, rather than a flat percentage.</li>
+            </ul>
+          </div>
+          <div class="box example"><strong>Investment example:</strong> shares bought for ₱100,000, sold six months later for ₱150,000 — the ₱50,000 gain is what gets taxed, not the ₱150,000 sale price.</div>
+        </div>
+
+        <div id="btax-calendar" class="subsection">
+          <h3><span class="n">06</span>Tax Calendar &amp; Key Filing Deadlines</h3>
+          <details class="disclosure">
+            <summary>Key filing dates</summary>
+            <div class="inner">
+              <table>
+                <tr><th>Due date</th><th>Form / description</th><th>Who files</th></tr>
+                <tr><td><strong>25th, quarterly</strong></td><td>VAT Return — quarterly</td><td>VAT-registered businesses</td></tr>
+                <tr><td><strong>20th–25th, monthly</strong></td><td>Percentage Tax Return</td><td>Non-VAT registered businesses</td></tr>
+                <tr><td><strong>April 15, annual</strong></td><td>Annual Income Tax Return</td><td>All individuals with income</td></tr>
+                <tr><td><strong>Quarterly, within 60 days of quarter-end</strong></td><td>Quarterly Income Tax Return</td><td>Self-employed / businesses</td></tr>
+                <tr><td><strong>15th day of the 4th month after FYE</strong></td><td>Corporate Annual Income Tax Return</td><td>Corporations</td></tr>
+                <tr><td><strong>January 31, annual</strong></td><td>Annual alphalist / withholding summary</td><td>Businesses with employees or withholding obligations</td></tr>
+              </table>
+            </div>
+          </details>
+          <div class="tip">
+            <span class="lbl">Business tax summary</span>
+            As a business owner, you may encounter: income tax (or the 8% flat option), percentage tax or VAT, local business tax, real property tax, documentary stamp tax, and withholding taxes — with a possible full exemption from income tax if you qualify as a BMBE. Keep organized records and file on time; deadlines don't move for exam season.
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- ===================== FLASHCARDS MODE ===================== -->
+  <div id="flash-view">
+    <div class="chips" id="flashChips"></div>
+    <div class="deck-meta"><span id="flashCount"></span><span id="flashTopicLabel"></span></div>
+    <div class="card-stage">
+      <div class="flashcard" id="flashcard" role="button" tabindex="0" aria-label="Flip flashcard">
+        <div class="face front">
+          <span class="eyebrow" id="flashFrontEyebrow">TERM</span>
+          <div class="term" id="flashTerm"></div>
+          <span class="hint">Tap to flip</span>
+        </div>
+        <div class="face back">
+          <span class="eyebrow">DEFINITION</span>
+          <div class="def" id="flashDef"></div>
+          <span class="hint">Tap to flip back</span>
+        </div>
+      </div>
+    </div>
+    <div class="deck-controls">
+      <button class="ctrl-btn" id="flashPrev">← Prev</button>
+      <button class="ctrl-btn primary" id="flashShuffle">Shuffle</button>
+      <button class="ctrl-btn" id="flashNext">Next →</button>
+    </div>
+  </div>
+
+  <!-- ===================== QUIZ MODE ===================== -->
+  <div id="quiz-view">
+    <div class="chips" id="quizChips"></div>
+    <div class="quiz-score">
+      <span>Score <b id="quizScore">0/0</b></span>
+      <span>Question <b id="quizPos">1</b> of <b id="quizTotal">0</b></span>
+    </div>
+    <div id="quizBody"></div>
+  </div>
+
+  <footer class="foot">
+    <p>🥐 Business Law &amp; Taxation Reviewer · ECC12 · Kokorolls Edition · Philippines</p>
+    <p>For exam prep. Rates reflect the TRAIN and CREATE laws and current BIR practice — always confirm specifics with official BIR issuances or an accountant before filing or relying on them for real filings.</p>
+  </footer>
+  <button class="back-to-top" id="backToTop" type="button" aria-label="Back to top" title="Back to top">↑</button>
+</div>
+
+<script>
+/* ============ STUDY MODE NAV ============ */
+const menuToggle = document.getElementById('menuToggle');
+const nav = document.getElementById('navigation');
+const topicLinks = document.querySelectorAll('.topic-link');
+const subLinks = document.querySelectorAll('.sub a');
+const sections = document.querySelectorAll('#mainContent .section');
+const mainContent = document.getElementById('mainContent');
+const readingProgress = document.getElementById('readingProgress');
+const backToTop = document.getElementById('backToTop');
+const visited = new Set(['contracts']);
+
+menuToggle.addEventListener('click', () => {
+  nav.classList.toggle('open');
+  menuToggle.classList.toggle('active');
+  menuToggle.setAttribute('aria-expanded', nav.classList.contains('open'));
+});
+
+function showSection(id){
+  sections.forEach(s => s.classList.remove('active'));
+  topicLinks.forEach(l => l.classList.remove('active'));
+  subLinks.forEach(l => l.classList.remove('active'));
+  topicLinks.forEach(l => l.removeAttribute('aria-current'));
+  const sec = document.getElementById(id);
+  if(sec){
+    sec.classList.add('active');
+    const link = document.querySelector(`.topic-link[data-section="${id}"]`);
+    if(link){
+      link.classList.add('active');
+      link.classList.add('visited');
+      link.setAttribute('aria-current', 'page');
+    }
+    visited.add(id);
+    window.scrollTo({top: 0, behavior: 'smooth'});
+    updateActiveSubtopic();
+  }
+}
+
+function setActiveSubtopic(targetId){
+  subLinks.forEach(link => {
+    const isActive = link.getAttribute('data-target') === targetId;
+    link.classList.toggle('active', isActive);
+    if(isActive) link.setAttribute('aria-current', 'location');
+    else link.removeAttribute('aria-current');
+    if(isActive && (window.innerWidth > 768 || nav.classList.contains('open'))){
+      link.scrollIntoView({block: 'nearest'});
+    }
+  });
+}
+
+function updateActiveSubtopic(){
+  const activeSection = document.querySelector('#mainContent .section.active');
+  if(!activeSection) return;
+  const subsectionList = [...activeSection.querySelectorAll('.subsection')];
+  if(!subsectionList.length) return;
+
+  const headerOffset = 110;
+  let current = subsectionList[0];
+  subsectionList.forEach(subsection => {
+    if(subsection.getBoundingClientRect().top <= headerOffset) current = subsection;
+  });
+  setActiveSubtopic(current.id);
+}
+
+window.addEventListener('scroll', updateActiveSubtopic, {passive: true});
+
+function updateReadingProgress(){
+  const scrollable = document.documentElement.scrollHeight - window.innerHeight;
+  const progress = scrollable > 0 ? (window.scrollY / scrollable) * 100 : 0;
+  readingProgress.style.width = `${progress}%`;
+  backToTop.classList.toggle('visible', window.scrollY > 520);
+}
+
+window.addEventListener('scroll', updateReadingProgress, {passive: true});
+backToTop.addEventListener('click', () => window.scrollTo({top: 0, behavior: 'smooth'}));
+updateReadingProgress();
+
+topicLinks.forEach(link => {
+  link.addEventListener('click', () => {
+    showSection(link.getAttribute('data-section'));
+    if(window.innerWidth <= 768){ nav.classList.remove('open'); menuToggle.classList.remove('active'); }
+  });
+});
+
+subLinks.forEach(link => {
+  link.addEventListener('click', () => {
+    const targetId = link.getAttribute('data-target');
+    const el = document.getElementById(targetId);
+    if(el){
+      const parent = el.closest('.section');
+      if(parent){
+        showSection(parent.id);
+        setActiveSubtopic(targetId);
+        setTimeout(() => el.scrollIntoView({behavior:'smooth', block:'start'}), 80);
+      }
+    }
+    if(window.innerWidth <= 768){ nav.classList.remove('open'); menuToggle.classList.remove('active'); }
+  });
+});
+
+/* ============ MODE SWITCHER ============ */
+const modeBtns = document.querySelectorAll('.mode-btn');
+const studyView = document.getElementById('study-view');
+const flashView = document.getElementById('flash-view');
+const quizView = document.getElementById('quiz-view');
+
+modeBtns.forEach(btn => {
+  btn.addEventListener('click', () => {
+    modeBtns.forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const mode = btn.getAttribute('data-mode');
+    studyView.style.display = mode === 'study' ? 'flex' : 'none';
+    flashView.classList.toggle('active', mode === 'flash');
+    quizView.classList.toggle('active', mode === 'quiz');
+    if(mode === 'flash' && !flashInitialized) initFlash();
+    if(mode === 'quiz' && !quizInitialized) initQuiz();
+  });
+});
+
+/* ============ TOPIC DATA (shared labels) ============ */
+const TOPICS = [
+  {id:'contracts', label:'Contracts'},
+  {id:'agency', label:'Agency'},
+  {id:'corporations', label:'Corporations'},
+  {id:'partnerships', label:'Partnerships'},
+  {id:'income-tax', label:'Income Tax'},
+  {id:'vat', label:'VAT & % Tax'},
+  {id:'excise', label:'Excise'},
+  {id:'business-taxes', label:'Other Taxes'}
+];
+
+/* ============ FLASHCARD DATA ============ */
+const FLASHCARDS = [
+  {t:'contracts', term:'OCAT', def:'The four elements a contract needs: Offer, Consideration, Acceptance, Intent to be bound.'},
+  {t:'contracts', term:'Bilateral contract', def:'Both parties owe a performance — e.g. a sale of goods.'},
+  {t:'contracts', term:'Unilateral contract', def:'Only one party is obligated — e.g. a reward promise.'},
+  {t:'contracts', term:'Rescission', def:'A remedy that cancels the contract and restores both parties to their original position.'},
+  {t:'contracts', term:'Specific performance', def:'A court order forcing the breaching party to actually perform, used when damages alone can\'t fix it.'},
+  {t:'agency', term:'Agency', def:'A relationship where an agent acts on behalf of a principal, with the principal\'s consent, toward third parties.'},
+  {t:'agency', term:'Apparent authority', def:'Authority that appears to exist from the principal\'s conduct, even without an actual grant — the principal is still bound.'},
+  {t:'agency', term:'Ratification', def:'The principal later approves an agent\'s unauthorized act, making it retroactively valid.'},
+  {t:'agency', term:'Principal\'s liability', def:'A principal is bound by acts an agent performs within the scope of the agent\'s authority.'},
+  {t:'corporations', term:'Corporation', def:'A legal entity separate from its owners; can own property, sue, and be sued in its own name.'},
+  {t:'corporations', term:'Limited liability', def:'Shareholders risk only what they invested — personal assets are shielded from corporate debts.'},
+  {t:'corporations', term:'Perpetual succession', def:'A corporation continues to exist even as its owners change.'},
+  {t:'corporations', term:'One Person Corporation (OPC)', def:'A corporation with a single stockholder who also serves as director/president, while still enjoying limited liability.'},
+  {t:'partnerships', term:'General partnership', def:'All partners manage the business and share unlimited personal liability for its debts.'},
+  {t:'partnerships', term:'Limited partnership', def:'Mixes general partners (manage, unlimited liability) with limited partners (invest only, liability capped).'},
+  {t:'partnerships', term:'Joint venture', def:'A temporary partnership formed for one specific project, dissolving once it ends.'},
+  {t:'income-tax', term:'Taxable income', def:'Gross income minus allowable deductions — the actual amount income tax is computed on.'},
+  {t:'income-tax', term:'8% flat tax option', def:'A single 8% rate on gross sales over ₱250,000 for self-employed individuals earning ≤₱3M/year, replacing both graduated income tax and percentage tax.'},
+  {t:'income-tax', term:'MSME corporate rate', def:'20% corporate income tax for domestic corporations with net taxable income ≤₱5M and assets ≤₱100M (excluding land).'},
+  {t:'income-tax', term:'MCIT', def:'Minimum Corporate Income Tax — 2% of gross income, applies from a corporation\'s 4th year if it would otherwise owe less.'},
+  {t:'vat', term:'Output VAT', def:'VAT you collect from customers on sales — this is what you owe the BIR.'},
+  {t:'vat', term:'Input VAT', def:'VAT you paid on business purchases — creditable against output VAT.'},
+  {t:'vat', term:'VAT threshold', def:'₱3,000,000 in annual gross sales/receipts — the point at which VAT registration becomes mandatory.'},
+  {t:'vat', term:'Percentage tax', def:'A flat 3% tax on gross sales for non-VAT-registered businesses below the VAT threshold.'},
+  {t:'excise', term:'Excise tax', def:'A selective tax on specific goods — tobacco, alcohol, fuel, sweetened drinks, luxury autos — for revenue and to discourage use.'},
+  {t:'excise', term:'Excise vs. VAT', def:'Excise applies to specific goods only, at high rates; VAT applies broadly at a uniform 12%. Both can apply to the same item.'},
+  {t:'business-taxes', term:'BMBE', def:'Barangay Micro Business Enterprise — a business with assets ≤₱3M (excluding land) can register for income tax exemption.'},
+  {t:'business-taxes', term:'Documentary stamp tax', def:'A tax on legal documents and instruments, generally ₱1.50 per ₱200 of the document\'s value.'},
+  {t:'business-taxes', term:'Final withholding tax', def:'A withheld amount that is the full and final tax on that income — nothing more is due.'}
+];
+
+let flashInitialized = false;
+let flashDeck = [...FLASHCARDS];
+let flashIndex = 0;
+let flashTopicFilter = 'all';
+
+function initFlash(){
+  flashInitialized = true;
+  const chipsWrap = document.getElementById('flashChips');
+  const allChip = mkChip('all', 'All');
+  chipsWrap.appendChild(allChip);
+  TOPICS.forEach(t => chipsWrap.appendChild(mkChip(t.id, t.label)));
+  allChip.classList.add('active');
+  document.getElementById('flashcard').addEventListener('click', () => {
+    document.getElementById('flashcard').classList.toggle('flipped');
+  });
+  document.getElementById('flashcard').addEventListener('keydown', event => {
+    if(event.key === 'Enter' || event.key === ' '){
+      event.preventDefault();
+      document.getElementById('flashcard').classList.toggle('flipped');
+    }
+  });
+  document.getElementById('flashPrev').addEventListener('click', () => stepFlash(-1));
+  document.getElementById('flashNext').addEventListener('click', () => stepFlash(1));
+  document.getElementById('flashShuffle').addEventListener('click', () => {
+    for(let i = flashDeck.length - 1; i > 0; i--){
+      const j = Math.floor(Math.random() * (i+1));
+      [flashDeck[i], flashDeck[j]] = [flashDeck[j], flashDeck[i]];
+    }
+    flashIndex = 0;
+    renderFlash();
+  });
+  function mkChip(id, label){
+    const c = document.createElement('button');
+    c.className = 'chip'; c.textContent = label;
+    c.addEventListener('click', () => {
+      flashTopicFilter = id;
+      [...chipsWrap.children].forEach(x => x.classList.remove('active'));
+      c.classList.add('active');
+      flashDeck = id === 'all' ? [...FLASHCARDS] : FLASHCARDS.filter(f => f.t === id);
+      flashIndex = 0;
+      renderFlash();
+    });
+    return c;
+  }
+  renderFlash();
+}
+
+function stepFlash(dir){
+  document.getElementById('flashcard').classList.remove('flipped');
+  flashIndex = (flashIndex + dir + flashDeck.length) % flashDeck.length;
+  renderFlash();
+}
+
+function renderFlash(){
+  if(flashDeck.length === 0) return;
+  const card = flashDeck[flashIndex];
+  document.getElementById('flashTerm').textContent = card.term;
+  document.getElementById('flashDef').textContent = card.def;
+  document.getElementById('flashCount').textContent = `Card ${flashIndex+1} of ${flashDeck.length}`;
+  const topic = TOPICS.find(t => t.id === card.t);
+  document.getElementById('flashTopicLabel').textContent = topic ? topic.label : '';
+}
+
+/* ============ QUIZ DATA ============ */
+const QUIZ = [
+  {t:'contracts', q:'A customer walks in, picks up a box of rolls, and pays at the counter without a word being said. What kind of contract is this?', choices:['Unilateral','Implied','Void','Reformed'], a:1, ex:'Terms are understood from conduct, not stated aloud — that\'s an implied contract.'},
+  {t:'contracts', q:'You and a supplier both mistakenly wrote the wrong price in a contract. Which remedy fits?', choices:['Rescission','Damages','Reformation','Specific performance'], a:2, ex:'Reformation lets a court correct wording where both sides shared the same honest mistake.'},
+  {t:'contracts', q:'Which is NOT one of the four OCAT elements?', choices:['Offer','Consideration','Registration','Intent'], a:2, ex:'OCAT is Offer, Consideration, Acceptance, Intent — registration isn\'t part of contract validity.'},
+  {t:'agency', q:'You never told your helper they could sign for deliveries, but you always let them do it in front of customers. Legally, this is likely:', choices:['Express authority','Apparent authority','No authority at all','Ratification'], a:1, ex:'Apparent authority arises from how the principal\'s conduct makes it look to third parties, even without an explicit grant.'},
+  {t:'agency', q:'An agent secretly takes a manufacturer\'s kickback instead of passing on the discount to the principal. This breaches the agent\'s duty to:', choices:['Follow instructions','Avoid conflicts of interest','Keep records','Maintain confidentiality'], a:1, ex:'Profiting personally at the principal\'s expense violates the duty to avoid conflicts of interest.'},
+  {t:'agency', q:'If your agent signs a supplier contract within the authority you gave them, who is bound to the supplier?', choices:['The agent only','Nobody, it\'s void','You, the principal','It depends on the supplier\'s knowledge'], a:2, ex:'A principal is liable for acts an agent performs within the scope of granted authority.'},
+  {t:'corporations', q:'What is the single biggest legal advantage a corporation offers over a sole proprietorship?', choices:['Higher profits','Limited liability','No taxes','Faster registration'], a:1, ex:'Limited liability caps an owner\'s loss at their investment — personal assets stay protected.'},
+  {t:'corporations', q:'A corporation with one stockholder who also serves as its director and president is a:', choices:['General partnership','Non-stock corporation','One Person Corporation','Joint venture'], a:2, ex:'An OPC lets a solo founder incorporate — with limited liability — without needing co-owners.'},
+  {t:'corporations', q:'Who elects the Board of Directors?', choices:['The BIR','The President/CEO','Shareholders','Employees'], a:2, ex:'Shareholders vote on major matters, including electing the Board, which then hires and supervises the CEO.'},
+  {t:'partnerships', q:'In a general partnership, if the business owes ₱1,000,000 and has no assets left, what happens to a partner\'s personal savings?', choices:['Fully protected','Can be seized to cover the debt','Only 50% at risk','Protected only if incorporated'], a:1, ex:'General partners have unlimited personal liability for partnership debts.'},
+  {t:'partnerships', q:'A limited partner in an LP is generally:', choices:['Personally liable for everything','Barred from investing money','Liable only up to their investment, if they don\'t manage','Automatically the managing partner'], a:2, ex:'Limited partners trade management rights for capped liability — as soon as they start managing, that protection is at risk.'},
+  {t:'partnerships', q:'Which best distinguishes a partnership\'s taxation from a corporation\'s?', choices:['Partnerships pay no tax ever','Partnership income passes through to partners; corporate income is taxed at the entity level, then again as dividends','Corporations are tax-exempt','There is no difference'], a:1, ex:'Corporate income faces a double layer of taxation that pass-through partnership income avoids.'},
+  {t:'income-tax', q:'Kokorolls earns ₱48,000 taxable income for the month (₱576,000/year) as a sole proprietor. Which applies?', choices:['0% — fully exempt','The graduated table, or the 8% flat option if elected and eligible','Automatic 32% rate','VAT at 12%'], a:1, ex:'A self-employed individual under the ₱3M threshold can choose between the graduated table and the 8% flat option — whichever is lower.'},
+  {t:'income-tax', q:'A small corporation has ₱4,000,000 net taxable income and ₱60,000,000 in assets (excluding land). What corporate income tax rate applies?', choices:['30%','25%','20%','0%'], a:2, ex:'It meets both MSME thresholds — net taxable income ≤₱5M and assets ≤₱100M — so the 20% preferential rate applies.'},
+  {t:'income-tax', q:'What does MCIT stand for, and when does it kick in?', choices:['Monthly Corporate Income Tax, from year 1','Minimum Corporate Income Tax, from year 4 if it exceeds the regular tax due','Maximum Corporate Income Tax, always','Municipal Corporate Income Tax, on request'], a:1, ex:'MCIT is a 2%-of-gross-income floor that applies from a corporation\'s 4th year onward when it would otherwise owe less.'},
+  {t:'vat', q:'Kokorolls earns ₱900,000/year in sales. Is Kokorolls required to register for and charge 12% VAT?', choices:['Yes, all food businesses must charge VAT','No — it\'s well under the ₱3,000,000 threshold','Only if it has more than 5 employees','Yes, but only during bazaars'], a:1, ex:'VAT registration is mandatory only above ₱3,000,000 in annual gross sales; below that, percentage tax or the 8% option applies instead.'},
+  {t:'vat', q:'A VAT-registered business collected ₱600 in output VAT and paid ₱120 in input VAT on supplies. What does it remit to the BIR?', choices:['₱600','₱120','₱480','₱720'], a:2, ex:'Net VAT payable = Output VAT − Input VAT = ₱600 − ₱120 = ₱480.'},
+  {t:'vat', q:'Which is generally VAT-exempt rather than VAT-able?', choices:['Cooked restaurant food','Raw, unprocessed vegetables at a wet market','Rental of commercial equipment','Professional consulting fees'], a:1, ex:'Raw, unprocessed foodstuffs are VAT-exempt; cooking or processing them (like baking rolls) makes them VAT-able in principle.'},
+  {t:'excise', q:'Which best explains why excise tax and VAT can both apply to the same pack of cigarettes?', choices:['They can\'t — it would be double taxation','Excise and VAT are separate, legally distinct taxes that can stack','Excise replaces VAT for tobacco','VAT only applies to food'], a:1, ex:'Excise tax and VAT are administered as separate taxes and can both apply to the same excisable good.'},
+  {t:'excise', q:'What is the primary reason sugar-sweetened beverages carry an excise tax?', choices:['To fund public schools only','Public health — reducing sugar consumption','To lower the price of soda','Because they\'re imported'], a:1, ex:'Alongside revenue, excise tax on sweetened drinks is meant to discourage excess consumption for public health reasons.'},
+  {t:'business-taxes', q:'A home bakery has ₱1,200,000 in total assets (excluding land) and modest annual income. Which exemption should it check?', choices:['VAT exemption only','BMBE registration for income tax exemption','Excise tax holiday','Capital gains exemption'], a:1, ex:'A business under the ₱3M asset ceiling can register as a Barangay Micro Business Enterprise for income tax exemption.'},
+  {t:'business-taxes', q:'You sign a ₱100,000 supplier contract. What tax is computed on that document itself?', choices:['Documentary stamp tax','Excise tax','Percentage tax','Real property tax'], a:0, ex:'Documentary stamp tax applies to contracts and instruments, roughly ₱1.50 per ₱200 of the document\'s value.'},
+  {t:'business-taxes', q:'You pay a freelance designer ₱10,000 and withhold 5% before paying them. What did you just do?', choices:['Committed tax evasion','Applied withholding tax, remitting ₱500 to the BIR on the designer\'s behalf','Overpaid VAT','Applied excise tax'], a:1, ex:'Withholding tax on contractor payments requires the payor to deduct and remit a portion — commonly 5% — directly to the BIR.'}
+];
+
+let quizInitialized = false;
+let quizPool = [...QUIZ];
+let quizIdx = 0;
+let quizScore = 0;
+let quizAnswered = 0;
+let quizTopicFilter = 'all';
+
+function initQuiz(){
+  quizInitialized = true;
+  const chipsWrap = document.getElementById('quizChips');
+  const allChip = mkQChip('all', 'All');
+  chipsWrap.appendChild(allChip);
+  TOPICS.forEach(t => chipsWrap.appendChild(mkQChip(t.id, t.label)));
+  allChip.classList.add('active');
+  function mkQChip(id, label){
+    const c = document.createElement('button');
+    c.className = 'chip'; c.textContent = label;
+    c.addEventListener('click', () => {
+      quizTopicFilter = id;
+      [...chipsWrap.children].forEach(x => x.classList.remove('active'));
+      c.classList.add('active');
+      resetQuiz();
+    });
+    return c;
+  }
+  resetQuiz();
+}
+
+function resetQuiz(){
+  quizPool = quizTopicFilter === 'all' ? [...QUIZ] : QUIZ.filter(q => q.t === quizTopicFilter);
+  for(let i = quizPool.length - 1; i > 0; i--){
+    const j = Math.floor(Math.random() * (i+1));
+    [quizPool[i], quizPool[j]] = [quizPool[j], quizPool[i]];
+  }
+  quizIdx = 0; quizScore = 0; quizAnswered = 0;
+  document.getElementById('quizTotal').textContent = quizPool.length;
+  renderQuiz();
+}
+
+function renderQuiz(){
+  document.getElementById('quizScore').textContent = `${quizScore}/${quizAnswered}`;
+  const body = document.getElementById('quizBody');
+  if(quizIdx >= quizPool.length){
+    document.getElementById('quizPos').textContent = quizPool.length;
+    const pct = quizPool.length ? Math.round((quizScore/quizPool.length)*100) : 0;
+    body.innerHTML = `<div class="quiz-done"><div class="big">${pct}%</div><p>You scored ${quizScore} out of ${quizPool.length}.</p>
+      <div class="deck-controls" style="margin-top:18px;"><button class="ctrl-btn primary" id="quizRetry">Try again</button></div></div>`;
+    document.getElementById('quizRetry').addEventListener('click', resetQuiz);
+    return;
+  }
+  document.getElementById('quizPos').textContent = quizIdx + 1;
+  const item = quizPool[quizIdx];
+  const topic = TOPICS.find(t => t.id === item.t);
+  const isTax = ['income-tax','vat','excise','business-taxes'].includes(item.t);
+  body.innerHTML = `
+    <div class="q-card">
+      <span class="pill ${isTax ? 'tax' : 'law'} q-pill">${topic ? topic.label : ''}</span>
+      <div class="q-text">${item.q}</div>
+      <div id="choicesWrap"></div>
+      <div class="explain" id="explainBox">${item.ex}</div>
+      <div class="q-actions"><button class="ctrl-btn primary" id="nextQBtn" style="display:none;">Next question →</button></div>
+    </div>`;
+  const wrap = document.getElementById('choicesWrap');
+  item.choices.forEach((choice, i) => {
+    const b = document.createElement('button');
+    b.className = 'choice';
+    b.textContent = choice;
+    b.addEventListener('click', () => {
+      const allBtns = wrap.querySelectorAll('.choice');
+      allBtns.forEach(x => x.disabled = true);
+      if(i === item.a){
+        b.classList.add('correct');
+        quizScore++;
+      } else {
+        b.classList.add('incorrect');
+        allBtns[item.a].classList.add('correct');
+      }
+      quizAnswered++;
+      document.getElementById('quizScore').textContent = `${quizScore}/${quizAnswered}`;
+      document.getElementById('explainBox').classList.add('show');
+      document.getElementById('nextQBtn').style.display = 'inline-block';
+    });
+    wrap.appendChild(b);
+  });
+  document.getElementById('nextQBtn').addEventListener('click', () => { quizIdx++; renderQuiz(); });
+}
+</script>
+</body>
+</html>
