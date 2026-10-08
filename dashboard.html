@@ -240,14 +240,39 @@
       });
       const reportCard = document.getElementById('report-card');
       const reportCardSeal = reportCard.querySelector('.report-card-seal');
-      let exportSealImage = reportCardSeal;
       const waitForReportCardAssets = async () => {
         if (!reportCardSeal.complete) await new Promise(resolve => { reportCardSeal.onload = resolve; reportCardSeal.onerror = resolve; });
         if (reportCardSeal.decode) await reportCardSeal.decode().catch(() => {});
-        exportSealImage = reportCardSeal;
       };
       const captureReportCard = async () => {
         return html2canvas(reportCard, {backgroundColor: '#ffffff', scale: 2, useCORS: true});
+      };
+      const buildFormalReportCard = () => {
+        const legalPage = document.createElement('section');
+        legalPage.setAttribute('aria-hidden', 'true');
+        legalPage.style.cssText = 'position:fixed;left:-10000px;top:0;width:816px;z-index:-1;';
+        const term = termSelect.value;
+        const average = document.getElementById('generalAverage').textContent;
+        const standing = document.getElementById('studentStatus').textContent;
+        const generatedAt = new Date().toLocaleDateString('en-US', {year:'numeric',month:'long',day:'numeric'});
+        const reportRows = [...resultsBody.querySelectorAll('tr')].filter(row => row.cells.length > 1).map(row => {
+          const cells = [...row.cells];
+          const subject = cells[0].querySelector('strong')?.textContent || cells[0].textContent.trim();
+          const code = cells[0].querySelector('small')?.textContent || '';
+          return [subject, code, ...cells.slice(1).map(cell => cell.textContent.trim())];
+        });
+        const tableRows = reportRows.length ? reportRows.map(([subject, code, grade, teacher, rowTerm, gpa, remarks, status]) => `<tr><td><strong>${escapeHtml(subject)}</strong><small>${escapeHtml(code)}</small></td><td>${escapeHtml(grade)}</td><td>${escapeHtml(teacher)}</td><td>${escapeHtml(rowTerm)}</td><td>${escapeHtml(gpa)}</td><td>${escapeHtml(remarks)}</td><td>${escapeHtml(status)}</td></tr>`).join('') : '<tr><td colspan="7">No enrolled units are recorded for this term.</td></tr>';
+        legalPage.innerHTML = `<style>
+          .formal-sheet{position:relative;isolation:isolate;box-sizing:border-box;width:816px;min-height:1056px;padding:58px 66px 52px;overflow:hidden;background:#fff;color:#242326;font:16px/1.45 Georgia,'Times New Roman',serif}
+          .formal-watermark{position:absolute;z-index:-1;left:50%;top:50%;width:408px;height:528px;object-fit:contain;opacity:.065;transform:translate(-50%,-50%)}
+          .formal-head{position:relative;display:grid;grid-template-columns:76px 1fr;align-items:center;gap:18px;padding-bottom:22px;border-bottom:3px double #6d1d28;text-align:center}
+          .formal-seal{width:72px;height:72px;object-fit:contain}.formal-school{margin:0;color:#6d1d28;font:700 22px/1.2 Georgia,'Times New Roman',serif;letter-spacing:.04em}.formal-office{margin:5px 0 0;font:700 11px/1.4 Arial,sans-serif;letter-spacing:.16em}.formal-document{margin:26px 0 4px;text-align:center;font:700 19px/1.3 Georgia,'Times New Roman',serif;letter-spacing:.08em;text-transform:uppercase}.formal-subtitle{margin:0 0 24px;text-align:center;color:#625d5a;font:12px/1.5 Arial,sans-serif}
+          .formal-meta{display:grid;grid-template-columns:1fr 1fr;gap:0 28px;margin:0 0 24px;padding:14px 16px;border:1px solid #c9c0b8;background:rgba(255,255,255,.82)}.formal-meta div{padding:6px 0;border-bottom:1px solid #e3ddd7}.formal-meta div:nth-last-child(-n+2){border-bottom:0}.formal-meta dt{color:#6d1d28;font:700 10px/1.4 Arial,sans-serif;letter-spacing:.1em;text-transform:uppercase}.formal-meta dd{margin:3px 0 0;font:600 14px/1.4 Georgia,'Times New Roman',serif}
+          .formal-section-title{margin:0 0 9px;font:700 11px/1.4 Arial,sans-serif;letter-spacing:.12em;text-transform:uppercase}.formal-table{position:relative;width:100%;border-collapse:collapse;background:rgba(255,255,255,.88);font:11px/1.35 Arial,sans-serif}.formal-table th{padding:9px 6px;border:1px solid #6d1d28;color:#fff;background:#6d1d28;text-align:left;font-size:9px;letter-spacing:.04em;text-transform:uppercase}.formal-table td{padding:9px 6px;border:1px solid #cfc7c0;vertical-align:top}.formal-table tbody tr:nth-child(even){background:rgba(246,242,238,.9)}.formal-table td strong,.formal-table td small{display:block}.formal-table td small{margin-top:3px;color:#6d6a68;font-size:9px}
+          .formal-certification{margin-top:28px;padding:14px 16px;border-left:3px solid #c79b62;background:rgba(250,247,243,.9);font-size:12px}.formal-signoff{display:grid;grid-template-columns:1fr 1fr;gap:50px;margin-top:58px}.formal-signoff div{padding-top:8px;border-top:1px solid #625d5a;font:10px/1.5 Arial,sans-serif}.formal-signoff strong{display:block;font-size:11px}.formal-footer{position:absolute;right:66px;bottom:28px;left:66px;display:flex;justify-content:space-between;padding-top:8px;border-top:1px solid #cfc7c0;color:#625d5a;font:9px/1.4 Arial,sans-serif}
+        </style><article class="formal-sheet"><img class="formal-watermark" src="${escapeHtml(reportCardSeal.src)}" alt=""><header class="formal-head"><img class="formal-seal" src="${escapeHtml(reportCardSeal.src)}" alt=""><div><h1 class="formal-school">MARIKINA UNIVERSITY COLLEGE</h1><p class="formal-office">OFFICE OF THE REGISTRAR</p></div></header><h2 class="formal-document">Official Academic Record</h2><p class="formal-subtitle">Certified summary of published grades and enrollment status</p><dl class="formal-meta"><div><dt>Student name</dt><dd>${escapeHtml(name)}</dd></div><div><dt>Academic term</dt><dd>${escapeHtml(term)} · Academic Year 2025–2026</dd></div><div><dt>Enrollment standing</dt><dd>${escapeHtml(standing)}</dd></div><div><dt>General average</dt><dd>${escapeHtml(average)}</dd></div><div><dt>Record status</dt><dd>Published grades only</dd></div><div><dt>Date issued</dt><dd>${escapeHtml(generatedAt)}</dd></div></dl><h3 class="formal-section-title">Course and grade details</h3><table class="formal-table"><thead><tr><th>Subject</th><th>Grade</th><th>Instructor</th><th>Term</th><th>GPA</th><th>Remarks</th><th>Status</th></tr></thead><tbody>${tableRows}</tbody></table><p class="formal-certification">This document reflects the academic information available in the student portal at the date of issue. Grades marked as unpublished are not included in the general average.</p><div class="formal-signoff"><div><strong>Prepared from the student record system</strong>Office of the Registrar</div><div><strong>For official verification</strong>Registrar's authorized representative</div></div><footer class="formal-footer"><span>MARIKINA UNIVERSITY COLLEGE · ACADEMIC RECORD</span><span>Issued ${escapeHtml(generatedAt)}</span></footer></article>`;
+        document.body.appendChild(legalPage);
+        return legalPage;
       };
       const downloadReportCardImage = async () => {
         try {
@@ -260,20 +285,28 @@
       };
       document.getElementById('downloadImage').addEventListener('click', downloadReportCardImage);
       document.getElementById('downloadPdf').addEventListener('click', async () => {
+        let legalPage;
         try {
-          const canvas = await captureReportCard();
-          const imageData = canvas.toDataURL('image/png');
+          await waitForReportCardAssets();
+          legalPage = buildFormalReportCard();
+          const canvas = await html2canvas(legalPage.querySelector('.formal-sheet'), {backgroundColor:'#ffffff',scale:2,useCORS:true});
           const {jsPDF} = window.jspdf;
-          const pdf = new jsPDF({orientation: 'portrait', unit: 'pt', format: 'letter'});
-          const margin = 36;
+          const pdf = new jsPDF({orientation:'portrait',unit:'pt',format:'letter'});
           const pageWidth = pdf.internal.pageSize.getWidth();
           const pageHeight = pdf.internal.pageSize.getHeight();
-          const scale = Math.min((pageWidth - margin * 2) / canvas.width, (pageHeight - margin * 2) / canvas.height);
-          const imageWidth = canvas.width * scale;
-          const imageHeight = canvas.height * scale;
-          pdf.addImage(imageData, 'PNG', (pageWidth - imageWidth) / 2, (pageHeight - imageHeight) / 2, imageWidth, imageHeight);
+          const pagePixelHeight = Math.round(canvas.width * pageHeight / pageWidth);
+          for (let offsetY = 0; offsetY < canvas.height; offsetY += pagePixelHeight) {
+            if (offsetY > 0) pdf.addPage('letter','portrait');
+            const sliceHeight = Math.min(pagePixelHeight, canvas.height - offsetY);
+            const pageCanvas = document.createElement('canvas');
+            pageCanvas.width = canvas.width;
+            pageCanvas.height = sliceHeight;
+            pageCanvas.getContext('2d').drawImage(canvas,0,offsetY,canvas.width,sliceHeight,0,0,canvas.width,sliceHeight);
+            pdf.addImage(pageCanvas.toDataURL('image/png'),'PNG',0,0,pageWidth,sliceHeight * pageWidth / canvas.width);
+          }
           pdf.save(`report-card-${firstName.toLowerCase().replace(/[^a-z0-9]+/g, '-')}.pdf`);
         } catch (error) { console.error(error); }
+        finally { legalPage?.remove(); }
       });
       document.getElementById('logout').addEventListener('click', async () => { await supabaseClient.auth.signOut(); window.location.href = 'index.html'; });
     })();
